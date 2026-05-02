@@ -23,7 +23,7 @@ The motivating problem: the city's official lookup is a clunky multi-click flow 
 | Icons | **lucide-react** | Already aesthetic-aligned |
 | Hosting | **Netlify** | Static site, no backend needed |
 | State | **useState / useMemo** | App is too small for Redux/Zustand |
-| PWA | **vite-plugin-pwa** (recommended) | "Add to home screen" is the killer feature for the use case |
+| PWA | **vite-plugin-pwa** | Configured in `vite.config.ts`; manifest, service worker, maskable icons |
 
 **No backend.** All data sources have CORS enabled. Don't add a server unless we add features that genuinely need one (push notifications, multi-user accounts).
 
@@ -130,14 +130,15 @@ This is **not** a generic SaaS app. The aesthetic is **editorial / civic almanac
 ### Tokens (CSS vars, defined in `src/index.css`)
 
 ```css
---cream: #F1E9D2;       /* Background — warm parchment */
---cream-dark: #E8DFC4;
---ink: #0F1A2E;         /* Primary text — deep navy */
---ink-soft: #1A2540;
---red: #B23838;         /* Chicago flag red — accents, urgency */
---red-deep: #8A2828;
---green: #2A4F3A;       /* Calm/safe state — bottle green */
---rule: #1A2540;        /* Borders */
+--cream:        #F1E9D2;   /* Background — warm parchment */
+--cream-dark:   #E8DFC4;
+--ink:          #0F1A2E;   /* Primary text — deep navy */
+--ink-soft:     #1A2540;
+--chicago-red:  #C8102E;   /* Pantone 1795 — urgency, errors, CTA, the four stars */
+--red-deep:     #8A2828;
+--chicago-blue: #41B6E6;   /* Pantone 297 — section markers, calm states, hover */
+--blue-deep:    #2E8AB5;
+--rule:         #1A2540;   /* Borders */
 ```
 
 ### Typography
@@ -152,7 +153,7 @@ Never substitute Inter, Roboto, system-ui, Arial, or any other generic sans for 
 
 - **Single column, max-width ~600px.** This is a mobile-first tool. People check it on their phone in the morning.
 - **Heavy 2px borders + 1px rules.** Newspaper-grade structure.
-- **Section markers** ("✦ Section I — Lookup", "✦ Section II — Your Next Sweep") frame each block like an almanac entry.
+- **Section markers** (a `<ChicagoStar />` plus mono label, e.g. "Section I — Lookup", "Section II — Your Next Sweep") frame each block like an almanac entry.
 - **Decorative ornaments** (◢ ◣ ◥ ◤) at corners of major panels.
 - **Chicago flag stripe** at the top: red, cream, red, cream, red.
 
@@ -160,17 +161,24 @@ Never substitute Inter, Roboto, system-ui, Arial, or any other generic sans for 
 
 - **Cream** dominates as background.
 - **Ink** for all text and borders by default.
-- **Red** *only* for: urgency (sweep ≤ 2 days away), errors, accent labels, the flag stripe. Don't dilute it.
-- **Green** for safe / completed / calm states (e.g. "season concluded").
+- **Chicago blue** for section markers, ward/section number callouts, calm states (e.g. "season concluded"), the masthead flag stripe, and hover/pressed states.
+- **Chicago red** *only* for: urgency (sweep ≤ 2 days away), errors, the primary CTA, and the four-star motif. Reserved — never decorative.
 
 ### Don'ts
 
-- No purple gradients
-- No glassmorphism, neumorphism, or any other 2020s-era SaaS cliché
-- No gradient text
-- No emoji except the Chicago flag stars (✦) and sparing utility marks
+- No purple gradients, glassmorphism, neumorphism, gradient text
+- No emoji except the `<ChicagoStar />` SVG and sparing utility marks (◢ ◣ ◥ ◤, ⬩)
 - No `border-radius: 9999px` on buttons. Buttons are sharp rectangles.
 - No drop shadows except subtle paper-on-paper for layering
+- No third color outside the palette. If a new state needs to feel distinct, do it through weight/border/scale, not a new hue
+
+### Design motif: the four stars
+
+The Chicago flag has four six-pointed red stars (Fort Dearborn, Great Fire, Columbian Exposition, Century of Progress). The app reflects this:
+
+- Four stars across the masthead, mirroring the flag.
+- One star anchors each major page region: Lookup, Next Sweep, Almanac, Footnotes.
+- All stars render via `<ChicagoStar />` in `src/components/ChicagoStar.tsx` — never as Unicode star glyphs (e.g. four-pointed/six-pointed star characters) or other text symbols.
 
 ---
 
@@ -191,16 +199,16 @@ chi-sweep/
 │   └── icons/                      # PWA icons
 └── src/
     ├── main.tsx
-    ├── App.tsx
+    ├── App.tsx                     # Composition only
     ├── index.css                   # Tailwind + font imports + CSS vars
-    ├── types.ts                    # SweepDate, ZoneInfo, GeocodeResult
-    ├── lib/
-    │   ├── geocode.ts              # geocode() + provider chain
-    │   ├── zones.ts                # lookupZone() + 2025/2026 fallback
+    ├── types.ts                    # SweepDate, ZoneInfo, GeocodeResult, LookupStatus, dataset constants
+    ├── lib/                        # Pure functions, no React imports
+    │   ├── geocode.ts              # geocode() + Census→Nominatim chain
+    │   ├── zones.ts                # lookupZone() + 2026→2025 fallback
     │   ├── schedule.ts             # fetchSchedule()
     │   ├── ics.ts                  # generateICS()
     │   ├── address.ts              # cleanAddress()
-    │   └── dates.ts                # daysFromToday(), startOfDay(), etc.
+    │   └── dates.ts                # daysFromToday(), startOfDay(), formatters
     ├── hooks/
     │   └── useLookup.ts            # Orchestrates the full geocode → zone → schedule flow
     └── components/
@@ -210,7 +218,9 @@ chi-sweep/
         ├── NextSweepHero.tsx
         ├── ScheduleAlmanac.tsx
         ├── Footnotes.tsx
-        └── HowItWorks.tsx
+        ├── HowItWorks.tsx
+        ├── ChicagoStar.tsx         # Six-pointed flag star, used everywhere as section marker
+        └── Seal.tsx                # Civic seal device (added in Task 17 creative pass)
 ```
 
 **Pattern:** `src/lib` is pure functions, no React. `src/hooks` orchestrates. `src/components` renders. Don't put fetches inside components.
