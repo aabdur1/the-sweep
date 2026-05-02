@@ -183,11 +183,14 @@ Never substitute Inter, Roboto, system-ui, Arial, or any other generic sans for 
 
 ### Layout principles
 
-- **Single column, max-width ~600px.** This is a mobile-first tool. People check it on their phone in the morning.
+- **Mobile-first single column** at `<lg:` (max-w-xl, ~576px). People check this on their phone in the morning.
+- **Desktop broadsheet** at `lg:` (≥1024px). Container expands to `max-w-[1280px]` with a thick `border-2 border-ink` page frame on a `bg-cream-dark` "table." Three-column body grid: `[140px _ 1fr _ 140px]` — `Marginalia` left + main + `Marginalia` right.
+- **Above-the-fold spread** (when a result is shown, at `lg:`): `NextSweepHero` (1.6fr) + `RoutinePickups` (1fr sidebar). Almanac becomes a 4-column month grid.
 - **Heavy 2px borders + 1px rules.** Newspaper-grade structure.
 - **Section markers** (a `<ChicagoStar />` plus mono label, e.g. "Section I — Lookup", "Section II — Your Next Sweep") frame each block like an almanac entry.
 - **Decorative ornaments** (◢ ◣ ◥ ◤) at corners of major panels.
 - **Chicago flag stripe** at the top: cream–blue–cream–blue–cream (matches the actual flag's two-blue-on-white construction, tinted to the cream base).
+- **Form panel constrained on desktop** (`lg:max-w-2xl mx-auto`) so it doesn't sprawl across the central column.
 
 ### Color use
 
@@ -213,6 +216,16 @@ The Chicago flag has four six-pointed red stars (Fort Dearborn, Great Fire, Colu
 - All stars render via `<ChicagoStar />` in `src/components/ChicagoStar.tsx` — never as Unicode star glyphs (e.g. four-pointed/six-pointed star characters) or other text symbols.
 
 **Sub-section convention:** when a top-level Section needs to split, use letter sub-numbering (II.a / II.b) rather than promoting to its own Section. This preserves the four-section / four-star mapping (I Lookup, II Pickups, III Almanac, IV Footnotes). Currently II.a = Sweep hero, II.b = Routine pickups (recycling + garbage).
+
+### Marginalia gloss pattern
+
+Some pulled facts in `Marginalia` need a one-sentence explanation (e.g. "Yellow / Orange" cycle). The pattern:
+
+- Add a `hint?: string` to the `Note`. If present, the row becomes a hover/focus target.
+- The kicker line gets a small `<ChicagoStar size={9} />` after the label as the affordance cue (scales 1.25× on hover/focus).
+- The tooltip slides into the page content from whichever gutter side the marginalia sits on (`right-full mr-3` for right gutter, `left-full ml-3` for left).
+- Mechanic uses `group-hover` + `group-focus-within` (no JS state) and `tabIndex={0} role="button" aria-describedby` for keyboard accessibility.
+- The popover is bordered cream-dark with editorial mono kicker + italic-serif body. No SaaS-style "?" icons.
 
 ---
 
@@ -261,6 +274,7 @@ chi-sweep/
         ├── Footnotes.tsx
         ├── HowItWorks.tsx
         ├── Masthead.tsx
+        ├── Marginalia.tsx          # Desktop-only side gutters: rotated label + pulled facts + tooltip-glossed terms
         ├── NextSweepHero.tsx
         ├── RoutinePickups.tsx
         ├── SaveAddressPrompt.tsx   # "Save this address" inline form below the hero
@@ -301,8 +315,8 @@ netlify deploy --prod
 
 - Hosted on **Netlify**. Repo connected via Git, auto-deploys on push to `main`.
 - `netlify.toml` configures build command (`npm run build`) and publish dir (`dist/`).
-- No environment variables required for the base feature set — all APIs are public, no keys.
-- When v3 ships, set `VITE_GOOGLE_MAPS_API_KEY` in Netlify env settings (HTTP-referrer-restricted to `sweep.amirabdurrahim.com/*` + `*.netlify.app/*` + `localhost:5173/*`; APIs limited to Places + Geocoding; daily quota cap below the free-tier ceiling).
+- **Env vars:** `VITE_GOOGLE_MAPS_API_KEY` (set in Netlify env) drives the autocomplete; **without it, the app still works** — search falls back to Census/Nominatim and the dropdown silently disables itself. Key is HTTP-referrer-restricted to `sweep.amirabdurrahim.com/*` + `*.netlify.app/*` + `localhost:5173/*`; APIs limited to Places + Geocoding; daily quota cap set below the free-tier ceiling.
+- **Local dev with autocomplete:** create `.env.local` with `VITE_GOOGLE_MAPS_API_KEY=<key>` (gitignored by default in Vite). Restart the dev server to pick it up.
 
 ---
 
@@ -354,6 +368,7 @@ When the city publishes the 2027 datasets:
 - **PWA** — installable on iOS/Android via vite-plugin-pwa.
 - **v2 — Routine pickups** (recycling + garbage). Holiday-shift detection. Two-`.ics` export.
 - **v3 — Google Places autocomplete + saved addresses + recents** with localStorage persistence and graceful Census/Nominatim fallback.
+- **v3.5 — Desktop broadsheet** layout. Marginalia gutters, hero+sidebar spread, 4-column almanac, theatrical empty-state Roman numerals. Mobile preserved.
 
 ### Backlog (in rough priority order)
 1. **Snow route status** — ArcGIS layer 50; high consequence in winter.
