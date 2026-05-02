@@ -49,13 +49,16 @@ User input (address or GPS)
 └──────────────────┘
         │  { ward, section }
         ▼
-┌──────────────────┐
-│  fetchSchedule() │  Filtered query against schedule dataset
-│  src/lib/sched.. │  Returns sorted Date[] for the season
-└──────────────────┘
-        │  SweepDate[]
-        ▼
-    UI renders: NextSweepHero + ScheduleAlmanac
+Promise.all (parallel after geocode + zone):
+  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
+  │  fetchSchedule() │  │ lookupRecycling()│  │  lookupGarbage() │
+  │  Socrata sweep   │  │  ArcGIS layer 76 │  │  ArcGIS layer 127│
+  └──────────────────┘  └──────────────────┘  └──────────────────┘
+        │ SweepDate[]      │ RecyclingInfo     │ GarbageInfo
+        └──────────────────┴───────────────────┘
+                           ▼
+   UI: Masthead + AddressInput + NextSweepHero (II.a)
+       + RoutinePickups (II.b) + ScheduleAlmanac + Footnotes
 ```
 
 Each layer is independent. If geocoding breaks, we still want zone lookup to work for the GPS path. If the 2026 zones dataset breaks, we want a 2025 fallback. **Always design data calls with a fallback chain.**
@@ -108,7 +111,7 @@ Each layer is independent. If geocoding breaks, we still want zone lookup to wor
    - Free but rate-limited and **frequently blocks sandboxed iframes**
    - Use only when Census misses
 
-**Never default to a single geocoder.** If you add a third (Mapbox, Google), require an env var for the key and put it last in the chain.
+**Never default to a single geocoder.** v3 (specced, not yet shipped) adds Google Places as the *primary* with autocomplete UX — Census/Nominatim becomes the fallback when `VITE_GOOGLE_MAPS_API_KEY` is missing or fails. See `docs/superpowers/specs/2026-05-02-address-search-saved-design.md`.
 
 ### 4. Address cleaning
 
@@ -173,7 +176,7 @@ Never substitute Inter, Roboto, system-ui, Arial, or any other generic sans for 
 - **Heavy 2px borders + 1px rules.** Newspaper-grade structure.
 - **Section markers** (a `<ChicagoStar />` plus mono label, e.g. "Section I — Lookup", "Section II — Your Next Sweep") frame each block like an almanac entry.
 - **Decorative ornaments** (◢ ◣ ◥ ◤) at corners of major panels.
-- **Chicago flag stripe** at the top: red, cream, red, cream, red.
+- **Chicago flag stripe** at the top: cream–blue–cream–blue–cream (matches the actual flag's two-blue-on-white construction, tinted to the cream base).
 
 ### Color use
 
@@ -245,7 +248,7 @@ chi-sweep/
         ├── NextSweepHero.tsx
         ├── RoutinePickups.tsx
         ├── ScheduleAlmanac.tsx
-        └── Seal.tsx
+        └── Seal.tsx                # Round civic-stamp device — curved text + four-star arc
 ```
 
 **Pattern:** `src/lib` is pure functions, no React. `src/hooks` orchestrates. `src/components` renders. Don't put fetches inside components.
@@ -281,7 +284,7 @@ netlify deploy --prod
 - Hosted on **Netlify**. Repo connected via Git, auto-deploys on push to `main`.
 - `netlify.toml` configures build command (`npm run build`) and publish dir (`dist/`).
 - No environment variables required for the base feature set — all APIs are public, no keys.
-- If we add a paid geocoder later (Mapbox), set `VITE_MAPBOX_TOKEN` in Netlify env settings.
+- When v3 ships, set `VITE_GOOGLE_MAPS_API_KEY` in Netlify env settings (HTTP-referrer-restricted to `sweep.amirabdurrahim.com/*` + `*.netlify.app/*` + `localhost:5173/*`; APIs limited to Places + Geocoding; daily quota cap below the free-tier ceiling).
 
 ---
 
@@ -308,6 +311,8 @@ When the city publishes the 2027 datasets:
 2. Update `SCHEDULE_DATASET_ID` and `ZONES_DATASET_ID` in `src/lib/`.
 3. Move the prior year's IDs into the fallback slot.
 4. Update `SCHEDULE_YEAR` constant.
+5. Refresh `src/lib/holidays.ts` from chicago.gov's "Holiday Garbage Schedule" page (filter Mon–Fri only, then bump the table year).
+6. Re-anchor the recycling A/B parity in `src/lib/recyclingDecode.ts` — verify `ANCHOR_WEEK_INDEX_IS_YELLOW` against the city's first Yellow week PDF for the new year.
 
 ---
 
@@ -326,15 +331,21 @@ When the city publishes the 2027 datasets:
 
 ## What's next (roadmap)
 
-Order of priority:
+### Shipped
+- **v1 — Vite + TS + Tailwind port** with the bold civic broadsheet visual direction.
+- **PWA** — installable on iOS/Android via vite-plugin-pwa.
+- **v2 — Routine pickups** (recycling + garbage). Holiday-shift detection. Two-`.ics` export.
 
-1. **PWA / Add to home screen** — the whole point is "I check this in the morning before work." Should feel like an app, not a website.
-2. **Calendar push notifications** — currently we provide an `.ics` download which gets the user 90% there. Native push would close the loop.
-3. **Save addresses** — most users have one home address. localStorage save + quick-tap recall.
-4. **Multiple addresses** — work parking, partner's place, parents' house.
-5. **Live sweeper tracker integration** — the city has a real-time fleet tracker (`https://www.chicago.gov/city/en/depts/streets/iframe/sweeper_tracker.html`). Embed or scrape.
-6. **311 reporting shortcut** — if there's debris that wasn't swept, file a 311 ticket from the app.
-7. **Dark mode** — but the editorial aesthetic was designed light-first. Dark mode needs its own design pass, not just inverted colors.
+### Specced, awaiting implementation
+- **v3 — Google Places autocomplete + saved addresses** (`docs/superpowers/specs/2026-05-02-address-search-saved-design.md`). Live typeahead scoped to Chicago, localStorage saves, recents. Falls back to Census/Nominatim if no API key.
+
+### Backlog (in rough priority order)
+1. **Snow route status** — ArcGIS layer 50; high consequence in winter.
+2. **311 quick links** from the looked-up address (missed pickup, sign down, pothole).
+3. **Calendar push notifications** — closes the loop on the `.ics` download.
+4. **Live sweeper tracker integration** — `chicago.gov/.../sweeper_tracker.html`.
+5. **Ward office contact** — alderperson and office number, sourced from the ward number we already have.
+6. **Dark mode** — needs its own design pass, not just inverted colors.
 
 ---
 
