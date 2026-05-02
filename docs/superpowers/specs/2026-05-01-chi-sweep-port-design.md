@@ -26,7 +26,7 @@ Take the working single-file prototype `sweep_finder.jsx` and ship it as a real 
 - Sweeper tracker integration.
 - 311 reporting shortcut.
 - Dark mode.
-- Automated tests. (Manual verification against canonical address `1819 S California Ave` → Ward 25 §04 is the v1 quality bar.)
+- Automated tests. (Manual verification against canonical address `1819 S California Ave` → Ward 25 §03 is the v1 quality bar.)
 
 ## Decisions
 
@@ -177,7 +177,7 @@ Ordered so the app works functionally before any visual polish, and `frontend-de
 7. **frontend-design creative pass.** Invoke the `frontend-design` skill on the assembled app. Push the visual direction: four-star masthead, blue/red rebalance, section-numbering tied to stars, ornament refinement, stronger typographic hierarchy. This is the creative leap from "ported" to "bold civic broadsheet."
 8. **PWA.** Configure `vite-plugin-pwa` with manifest (theme colors, name, short_name, display: standalone). Generate 192 + 512 maskable icons from `ChicagoStar`. End state: installable on iOS and Android.
 9. **Update `CLAUDE.md`.** Codify the new tokens, the dropped green, the star motif convention, the file structure as built. So future sessions have accurate project context.
-10. **Deploy.** Push to GitHub, connect Netlify, verify against canonical address `1819 S California Ave` (should resolve to Ward 25 §04). Test PWA install on a real phone.
+10. **Deploy.** Push to GitHub, connect Netlify, verify against canonical address `1819 S California Ave` (should resolve to Ward 25 §03). Test PWA install on a real phone.
 
 **Step 4 is the functional milestone.** Steps 5–7 are visual. Step 8 is platform polish.
 

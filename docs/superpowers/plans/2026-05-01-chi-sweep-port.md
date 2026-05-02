@@ -12,7 +12,7 @@
 
 **Reference source:** `sweep_finder.jsx` (root of repo). Will be renamed to `sweep_finder.reference.jsx` in Task 1 and deleted in Task 16 once parity is confirmed.
 
-**Note on testing:** Per the approved spec, v1 ships with no automated tests. Verification is manual against the canonical address `1819 S California Ave, Chicago` → Ward `25` § `04`. Each task ends with a manual verification step + commit.
+**Note on testing:** Per the approved spec, v1 ships with no automated tests. Verification is manual against the canonical address `1819 S California Ave, Chicago` → Ward `25` § `03`. Each task ends with a manual verification step + commit.
 
 **Working directory:** All paths are relative to `/Users/amirabdurrahim/repos/chi-street-sweep/`.
 
@@ -945,7 +945,7 @@ export default function App() {
 npm run dev
 ```
 
-Open `http://localhost:5173`. Type `1819 S California Ave`, click **Find schedule**. Expected: ward `25`, section `04`, list of dates. Try **Use location** (allow permission). Try a malformed address (e.g. `asdf`) and verify the error renders. Stop the server when verified.
+Open `http://localhost:5173`. Type `1819 S California Ave`, click **Find schedule**. Expected: ward `25`, section `03`, list of dates. Try **Use location** (allow permission). Try a malformed address (e.g. `asdf`) and verify the error renders. Stop the server when verified.
 
 - [ ] **Step 3: Commit (functional milestone)**
 
@@ -1547,7 +1547,7 @@ Open `http://localhost:5173`. Verify against the prototype JSX:
 - Masthead with cream/blue/cream/blue/cream stripe (NOT red — this is the new flag direction)
 - "✦" replaced with the six-pointed Chicago star
 - "How it works" panel visible before lookup
-- Type `1819 S California Ave`, click Find — Ward 25 §04 hero, full almanac, Footnotes appear
+- Type `1819 S California Ave`, click Find — Ward 25 §03 hero, full almanac, Footnotes appear
 - "Use current location" works
 - An invalid address shows the ErrorPanel
 - The ICS download produces a valid `.ics` file (open it; should contain VEVENT entries)
@@ -1910,7 +1910,7 @@ npm run preview
 ```
 
 Open `http://localhost:4173`:
-- Type `1819 S California Ave` → confirm Ward 25 §04 + dates
+- Type `1819 S California Ave` → confirm Ward 25 §03 + dates
 - Try `Use current location` (allow permission)
 - Try a malformed address → confirm error panel
 - Click `.ics` download → open the file, confirm valid VCALENDAR with VEVENT entries
