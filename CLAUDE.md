@@ -100,18 +100,21 @@ Each layer is independent. If geocoding breaks, we still want zone lookup to wor
 
 ### 3. Geocoders (multi-provider chain)
 
-**Order matters.** We learned this the hard way:
+Order matters:
 
-1. **U.S. Census Geocoder** (primary)
-   - `https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=<...>&benchmark=Public_AR_Current&format=json`
-   - Free, government-run, no rate limits, designed for U.S. addresses
-   - Coords at `result.addressMatches[0].coordinates.{x,y}` (x=lon, y=lat)
-2. **Nominatim** (fallback)
-   - `https://nominatim.openstreetmap.org/search?format=json&q=<...>`
-   - Free but rate-limited and **frequently blocks sandboxed iframes**
-   - Use only when Census misses
+1. **Google Places API (New)** — primary when `VITE_GOOGLE_MAPS_API_KEY` is set
+   - Autocomplete: `POST https://places.googleapis.com/v1/places:autocomplete`
+   - Place details: `GET https://places.googleapis.com/v1/places/{placeId}` with `X-Goog-FieldMask: location` (cheapest tier)
+   - Session-token billing: reuse one UUID across all autocomplete calls AND the follow-up details call for one user-search session
+   - Restricted to: HTTP referrers (sweep.amirabdurrahim.com + *.netlify.app + localhost:5173) and APIs (Places + Geocoding)
+2. **U.S. Census Geocoder** (fallback for direct text submit)
+   - `https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?...`
+   - Free, government-run, no rate limits — but **CORS-blocked from browsers** (works server-side; in the app it always fails)
+3. **Nominatim** (final fallback)
+   - `https://nominatim.openstreetmap.org/search?...`
+   - Free but rate-limited; OSM coverage
 
-**Never default to a single geocoder.** v3 (specced, not yet shipped) adds Google Places as the *primary* with autocomplete UX — Census/Nominatim becomes the fallback when `VITE_GOOGLE_MAPS_API_KEY` is missing or fails. See `docs/superpowers/specs/2026-05-02-address-search-saved-design.md`.
+The display string is always the **user-typed input** (`cleaned, Chicago`) or the Google `mainText, secondaryText` — never the verbose Nominatim `display_name`.
 
 ### 4. Address cleaning
 
@@ -141,6 +144,14 @@ Chicago's Socrata recycling dataset (`edks-4g3b`) is empty/deprecated. The live 
 - **Garbage fields:** `DAY` (full English weekday), `DIVISION`, `SAN_DAY`.
 - **Critical quirk:** the `WEEK A` letter and the `YLW` color label are NOT redundant. Use the color label for display; use the calendar week parity for "is this a pickup week" math (anchored by `lib/recyclingDecode.ts`'s `ANCHOR_WEEK_INDEX_IS_YELLOW` constant).
 - **Holiday shifts** are NOT in the ArcGIS data. We hand-encode them in `src/lib/holidays.ts` annually. **TODO: refresh this table at the end of each calendar year from chicago.gov's "Holiday Garbage Schedule" page.**
+
+### 6. localStorage façades (saved addresses + recents)
+
+- `lib/savedAddresses.ts` — `sweep.savedAddresses` key, capped at 10, de-duped by lat/lon (~1m precision).
+- `lib/recentLookups.ts` — `sweep.recentLookups` key, capped at 3, FIFO with re-push on repeat search.
+- Writes dispatch a synthetic `storage` event so same-tab subscribers (`useSavedAddresses`) re-render.
+- Failures are silent (iOS Safari private mode throws on `setItem`; the app degrades gracefully).
+- **Privacy:** addresses never leave the browser. CLAUDE.md "never store on a server" rule still holds — localStorage is local.
 
 ---
 
@@ -225,21 +236,26 @@ chi-sweep/
     ├── App.tsx                     # Composition only
     ├── index.css                   # Tailwind + font imports + CSS vars
     ├── types.ts                    # SweepDate, ZoneInfo, GeocodeResult, LookupStatus, dataset constants
-    ├── lib/                        # Pure functions, no React imports
-    │   ├── address.ts              # cleanAddress()
-    │   ├── dates.ts                # daysFromToday(), startOfDay(), nextDayOfWeek(), weekIndexFrom2026(), formatters
-    │   ├── garbage.ts              # lookupGarbage() — ArcGIS layer 127
-    │   ├── geocode.ts              # geocode() + Census→Nominatim chain
-    │   ├── holidays.ts             # 2026 Chicago Streets and San holiday-shift table
-    │   ├── ics.ts                  # generateICS() (sweep) + generateRoutineICS() (recycling+garbage)
-    │   ├── recycling.ts            # lookupRecycling() — ArcGIS layer 76
-    │   ├── recyclingDecode.ts      # AREA_DETAIL parser + isPickupWeek predicate
-    │   ├── schedule.ts             # fetchSchedule()
-    │   └── zones.ts                # lookupZone() + 2026→2025 fallback
+    ├── lib/
+    │   ├── address.ts
+    │   ├── dates.ts
+    │   ├── garbage.ts
+    │   ├── geocode.ts              # geocode() + geocodeByPlaceId() (Google Places)
+    │   ├── googlePlaces.ts         # Places API (New) autocomplete + details, session-token billed
+    │   ├── holidays.ts
+    │   ├── ics.ts
+    │   ├── recentLookups.ts        # sweep.recentLookups localStorage façade
+    │   ├── recycling.ts
+    │   ├── recyclingDecode.ts
+    │   ├── savedAddresses.ts       # sweep.savedAddresses localStorage façade
+    │   ├── schedule.ts
+    │   └── zones.ts
     ├── hooks/
-    │   └── useLookup.ts            # Orchestrates the full geocode → zone → schedule flow
+    │   ├── useAddressSearch.ts     # Debounced typeahead + session token
+    │   ├── useLookup.ts            # Orchestrates geocode → zone → schedule + recycling + garbage
+    │   └── useSavedAddresses.ts    # Reactive wrapper over saved-address localStorage
     └── components/
-        ├── AddressInput.tsx
+        ├── AddressInput.tsx        # Now includes ARIA combobox dropdown
         ├── ChicagoStar.tsx
         ├── ErrorPanel.tsx
         ├── Footnotes.tsx
@@ -247,6 +263,8 @@ chi-sweep/
         ├── Masthead.tsx
         ├── NextSweepHero.tsx
         ├── RoutinePickups.tsx
+        ├── SaveAddressPrompt.tsx   # "Save this address" inline form below the hero
+        ├── SavedAddressChips.tsx   # Chip row above the input
         ├── ScheduleAlmanac.tsx
         └── Seal.tsx                # Round civic-stamp device — curved text + four-star arc
 ```
@@ -335,9 +353,7 @@ When the city publishes the 2027 datasets:
 - **v1 — Vite + TS + Tailwind port** with the bold civic broadsheet visual direction.
 - **PWA** — installable on iOS/Android via vite-plugin-pwa.
 - **v2 — Routine pickups** (recycling + garbage). Holiday-shift detection. Two-`.ics` export.
-
-### Specced, awaiting implementation
-- **v3 — Google Places autocomplete + saved addresses** (`docs/superpowers/specs/2026-05-02-address-search-saved-design.md`). Live typeahead scoped to Chicago, localStorage saves, recents. Falls back to Census/Nominatim if no API key.
+- **v3 — Google Places autocomplete + saved addresses + recents** with localStorage persistence and graceful Census/Nominatim fallback.
 
 ### Backlog (in rough priority order)
 1. **Snow route status** — ArcGIS layer 50; high consequence in winter.
