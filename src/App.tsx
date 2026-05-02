@@ -82,7 +82,9 @@ export default function App() {
         >
           THE SWEEP · {result?.display ?? '—'} · printed {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
         </div>
-        <Masthead />
+        <div data-print-hide>
+          <Masthead />
+        </div>
 
         {/* Body grid: single column on mobile, three-column with marginalia on desktop */}
         <div data-page-grid className="lg:grid lg:grid-cols-[140px_minmax(0,1fr)_140px]">
@@ -90,7 +92,7 @@ export default function App() {
 
           <main className="lg:border-x lg:border-ink/30">
             {/* Lookup block — narrow on desktop so the form doesn't sprawl */}
-            <div className="lg:max-w-2xl lg:mx-auto">
+            <div data-print-hide className="lg:max-w-2xl lg:mx-auto">
               <div className="px-5 pt-6 lg:pt-8">
                 <SavedAddressChips
                   saved={savedHook.saved}
@@ -120,7 +122,7 @@ export default function App() {
             {result && (
               <>
                 {/* Above-the-fold spread: hero (lead) + routines (sidebar) on lg+ */}
-                <div className="lg:grid lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] lg:gap-0">
+                <div data-print-hide className="lg:grid lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] lg:gap-0">
                   <div className="lg:border-r lg:border-ink/30">
                     <NextSweepHero next={next} ward={result.ward} section={result.section} />
                     <SaveAddressPrompt
@@ -147,7 +149,9 @@ export default function App() {
                 </div>
 
                 <ScheduleAlmanac result={result} />
-                <Footnotes address={result.display} />
+                <div data-print-hide>
+                  <Footnotes address={result.display} />
+                </div>
               </>
             )}
 
@@ -157,7 +161,7 @@ export default function App() {
           <Marginalia side="right" />
         </div>
 
-        <footer className="border-t-2 border-ink mt-2">
+        <footer data-print-hide className="border-t-2 border-ink mt-2">
           <div className="border-t border-ink mt-[2px]" />
           <div className="px-5 py-5 text-center lg:py-7">
             <div className="flex items-center justify-center gap-2 mb-2 lg:gap-3 lg:mb-3">

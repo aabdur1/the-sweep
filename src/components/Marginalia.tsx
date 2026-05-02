@@ -100,7 +100,7 @@ interface Props {
 export const Marginalia = ({ side }: Props) => {
   const notes = side === 'left' ? LEFT_NOTES : RIGHT_NOTES;
   return (
-    <aside className="hidden lg:flex flex-col px-3 py-6 relative">
+    <aside className="hidden lg:flex print:hidden flex-col px-3 py-6 relative">
       {/* Vertical rule against the page content */}
       <div
         className={`absolute top-6 bottom-6 ${side === 'left' ? 'right-0' : 'left-0'} w-[1px] bg-ink/30`}

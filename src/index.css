@@ -142,4 +142,117 @@
       content: element(header);
     }
   }
+
+  /* ─── One-page almanac compaction ─────────────────────────────────── */
+  /* Force the months grid to 4 columns regardless of viewport-width media queries */
+  [data-almanac-grid] {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    column-gap: 0.18in !important;
+    row-gap: 0.16in !important;
+  }
+
+  /* Section III header: keep the headline, drop the kicker + byline to claw back vertical space */
+  section :is(h3, h4) {
+    margin: 0 !important;
+  }
+  section > header {
+    margin-bottom: 6pt !important;
+  }
+  section > header h3 {
+    font-size: 18pt !important;
+    line-height: 1 !important;
+  }
+  section > header > div > div > div:first-child,
+  section > header > div > div > div:last-child {
+    /* Section III mono kicker + count byline */
+    font-size: 7.5pt !important;
+    letter-spacing: 0.15em !important;
+  }
+
+  /* Each month panel — strip the ink-divider that adds bulk between cols */
+  [data-month-block] {
+    margin-bottom: 0 !important;
+    padding-left: 0 !important;
+    border-left: none !important;
+  }
+
+  [data-month-block] h4 {
+    font-size: 11pt !important;
+    line-height: 1 !important;
+    margin-bottom: 2pt !important;
+  }
+
+  /* Per-month "NN dates" byline + month-divider rule */
+  [data-month-block] > div:first-child {
+    margin-bottom: 3pt !important;
+  }
+  [data-month-block] > div:first-child > span {
+    font-size: 6.5pt !important;
+  }
+
+  /* Type rows: tight kickers and entries */
+  [data-month-block] [data-sweep-kicker],
+  [data-month-block] > div > div > div:first-child {
+    font-size: 7pt !important;
+    letter-spacing: 0.1em !important;
+    margin-bottom: 1pt !important;
+    gap: 2pt !important;
+  }
+
+  [data-month-block] > div > div {
+    margin-bottom: 2pt !important;
+  }
+
+  /* Date pills — render as compact text strips, not boxed cards */
+  [data-month-block] [data-pill-today],
+  [data-month-block] .inline-flex {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: baseline !important;
+    min-width: 0 !important;
+    border-width: 0 !important;
+    padding: 0 !important;
+    margin: 0 4pt 1pt 0 !important;
+    gap: 2pt !important;
+  }
+
+  [data-month-block] [data-pill-today] {
+    border-bottom: 1.5pt solid black !important;
+  }
+
+  /* Inside each pill: hide the day-of-week and month text; keep just the day number.
+     The kicker and the column position already disambiguate. */
+  [data-month-block] .inline-flex > span:nth-child(1),
+  [data-month-block] .inline-flex > span:nth-child(3) {
+    display: none !important;
+  }
+  [data-month-block] .inline-flex > span:nth-child(2) {
+    font-family: 'IBM Plex Mono', monospace !important;
+    font-size: 8.5pt !important;
+    line-height: 1 !important;
+    font-weight: 500 !important;
+  }
+  /* Holiday-shift "(was Fri)" annotation stays inline, smaller */
+  [data-month-block] .inline-flex > span:nth-child(4) {
+    font-size: 6pt !important;
+    margin-left: 1pt !important;
+    font-style: italic !important;
+  }
+  /* Hide the rotated "Swept" stamp on past sweep pills (paper doesn't need it) */
+  [data-month-block] .inline-flex > span:nth-child(5) {
+    display: none !important;
+  }
+
+  /* Off-season placeholder — slimmer */
+  [data-month-block] > div > div > div.font-mono.italic {
+    font-size: 6.5pt !important;
+    padding-left: 4pt !important;
+  }
+
+  /* Off-page entirely: ErrorPanel + HowItWorks shouldn't print either */
+  main > [class*="ErrorPanel"],
+  main > [class*="HowItWorks"] {
+    display: none !important;
+  }
 }

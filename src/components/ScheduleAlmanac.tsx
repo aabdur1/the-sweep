@@ -241,7 +241,7 @@ export const ScheduleAlmanac = ({ result }: Props) => {
       )}
 
       {filter.size > 0 && (
-        <div className="lg:grid lg:grid-cols-4 lg:gap-x-5 lg:gap-y-8">
+        <div data-almanac-grid className="lg:grid lg:grid-cols-4 lg:gap-x-5 lg:gap-y-8">
           {(showPast ? months : futureMonths).map((month, gi) => (
             <div
               key={month.monthIdx}
