@@ -49,24 +49,24 @@ export const Masthead = () => (
         size={48}
         className="absolute right-5 top-3 text-chicago-blue hidden sm:block lg:hidden"
       />
-      {/* Desktop seals — bigger, lower, more presence */}
+      {/* Desktop seals — sized to match the more restrained wordmark */}
       <Seal
-        size={104}
-        className="absolute left-12 top-1/2 -translate-y-1/2 text-chicago-blue hidden lg:block"
+        size={80}
+        className="absolute left-16 top-1/2 -translate-y-1/2 text-chicago-blue hidden lg:block"
       />
       <Seal
-        size={104}
-        className="absolute right-12 top-1/2 -translate-y-1/2 text-chicago-blue hidden lg:block"
+        size={80}
+        className="absolute right-16 top-1/2 -translate-y-1/2 text-chicago-blue hidden lg:block"
       />
       <h1
         className="font-serif leading-[0.85] tracking-[-0.02em] text-ink"
-        style={{ fontSize: 'clamp(56px, 16vw, 168px)' }}
+        style={{ fontSize: 'clamp(54px, 11vw, 124px)' }}
       >
         The Sweep
       </h1>
       <h2
         className="font-serif italic mt-1 text-chicago-blue tracking-tight lg:mt-3"
-        style={{ fontSize: 'clamp(15px, 4vw, 28px)' }}
+        style={{ fontSize: 'clamp(15px, 3vw, 24px)' }}
       >
         Registry &amp; Almanac
       </h2>
@@ -90,7 +90,7 @@ export const Masthead = () => (
     <div className="px-5 pb-6 pt-2 text-center lg:pb-8 lg:pt-4">
       <p
         className="font-serif italic text-ink-soft mx-auto leading-snug"
-        style={{ fontSize: 'clamp(14px, 3.6vw, 22px)', maxWidth: '54ch' }}
+        style={{ fontSize: 'clamp(14px, 2.4vw, 19px)', maxWidth: '70ch' }}
       >
         Find your sweeping schedule by address.
         <span className="text-chicago-red"> Never miss a $60 ticket again.</span>

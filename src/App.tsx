@@ -106,28 +106,31 @@ export default function App() {
           <Marginalia side="left" />
 
           <main className="lg:border-x lg:border-ink/30">
-            <div className="px-5 pt-6 lg:pt-8">
-              <SavedAddressChips
-                saved={savedHook.saved}
-                onPick={handlePickSaved}
-                onRemove={savedHook.remove}
+            {/* Lookup block — narrow on desktop so the form doesn't sprawl */}
+            <div className="lg:max-w-2xl lg:mx-auto">
+              <div className="px-5 pt-6 lg:pt-8">
+                <SavedAddressChips
+                  saved={savedHook.saved}
+                  onPick={handlePickSaved}
+                  onRemove={savedHook.remove}
+                />
+              </div>
+
+              <AddressInput
+                query={search.query}
+                setQuery={search.setQuery}
+                onSubmitText={handleSubmitText}
+                onSelectPlace={handleSelectPlace}
+                onSelectRecent={handleSelectRecent}
+                onUseLocation={handleUseLocation}
+                loading={isLoading}
+                locating={isLocating}
+                isSearching={search.isSearching}
+                suggestions={search.suggestions}
+                recents={recents}
+                hasGoogle={search.hasGoogle}
               />
             </div>
-
-            <AddressInput
-              query={search.query}
-              setQuery={search.setQuery}
-              onSubmitText={handleSubmitText}
-              onSelectPlace={handleSelectPlace}
-              onSelectRecent={handleSelectRecent}
-              onUseLocation={handleUseLocation}
-              loading={isLoading}
-              locating={isLocating}
-              isSearching={search.isSearching}
-              suggestions={search.suggestions}
-              recents={recents}
-              hasGoogle={search.hasGoogle}
-            />
 
             {error && <ErrorPanel message={error} onDismiss={reset} />}
 

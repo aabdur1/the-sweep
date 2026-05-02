@@ -7,8 +7,8 @@ interface Note {
 
 const LEFT_NOTES: Note[] = [
   { kicker: 'The fine', body: '$60' },
-  { kicker: 'Hours', body: '9 a.m.–2 p.m.' },
-  { kicker: 'Days', body: 'Weekdays' },
+  { kicker: 'Hours', body: '9–2' },
+  { kicker: 'Days', body: 'Mon–Fri' },
 ];
 
 const RIGHT_NOTES: Note[] = [
@@ -16,12 +16,6 @@ const RIGHT_NOTES: Note[] = [
   { kicker: 'Cycle', body: 'Yellow / Orange' },
   { kicker: 'Garbage', body: 'Weekly' },
 ];
-
-const todayShort = new Date().toLocaleDateString('en-US', {
-  month: 'short',
-  day: 'numeric',
-  year: 'numeric',
-});
 
 const NoteBlock = ({ note }: { note: Note }) => (
   <div className="border-y border-ink/40 py-3 my-3">
@@ -48,24 +42,20 @@ interface Props {
 export const Marginalia = ({ side }: Props) => {
   const notes = side === 'left' ? LEFT_NOTES : RIGHT_NOTES;
   return (
-    <aside className="hidden lg:flex flex-col px-4 py-6 relative">
+    <aside className="hidden lg:flex flex-col px-3 py-6 relative">
       {/* Vertical rule against the page content */}
       <div
         className={`absolute top-6 bottom-6 ${side === 'left' ? 'right-0' : 'left-0'} w-[1px] bg-ink/30`}
       />
 
-      {/* Top rotated label */}
-      <div className="flex items-center justify-center mb-6 h-24">
-        <VerticalLabel>
-          {side === 'left'
-            ? `Edition · ${todayShort}`
-            : `Civic Almanac · Vol. ${new Date().getFullYear()}`}
-        </VerticalLabel>
+      {/* Top short architectural label, comfortably tall so rotated text never bleeds */}
+      <div className="flex items-center justify-center mb-4 h-40 overflow-hidden">
+        <VerticalLabel>{side === 'left' ? 'Issue · 01' : 'Almanac'}</VerticalLabel>
       </div>
 
-      {/* Star */}
-      <div className="flex justify-center mb-2">
-        <ChicagoStar size={12} className="text-chicago-red" />
+      {/* Star divider */}
+      <div className="flex justify-center mb-1">
+        <ChicagoStar size={11} className="text-chicago-red" />
       </div>
 
       {/* Pulled quotes */}
