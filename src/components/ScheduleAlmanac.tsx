@@ -58,6 +58,7 @@ const DatePill = ({ entry, today }: PillProps) => {
 
   return (
     <div
+      data-pill-today={isToday ? '' : undefined}
       className={`inline-flex flex-col items-start min-w-[88px] px-2 py-1.5 ${accent} mr-2 mb-2`}
       style={{ opacity }}
     >
@@ -244,9 +245,10 @@ export const ScheduleAlmanac = ({ result }: Props) => {
           {(showPast ? months : futureMonths).map((month, gi) => (
             <div
               key={month.monthIdx}
+              data-month-block
               className={`mb-7 lg:mb-0 ${
                 gi % 4 !== 0 ? 'lg:pl-5 lg:border-l lg:border-ink/30' : ''
-              } print:break-inside-avoid`}
+              }`}
             >
               <div className="flex items-baseline gap-3 mb-3 lg:flex-col lg:items-start lg:gap-1 lg:mb-4">
                 <h4 className="font-serif text-2xl text-ink leading-none lg:text-3xl">
@@ -267,8 +269,11 @@ export const ScheduleAlmanac = ({ result }: Props) => {
 
                   return (
                     <div key={t}>
-                      <div className={`font-mono text-[10px] tracking-[0.25em] uppercase mb-1.5 flex items-center gap-1.5 ${TYPE_KICKER_COLOR[t]}`}>
-                        <ChicagoStar size={8} /> {TYPE_LABELS[t]}
+                      <div
+                        data-sweep-kicker={t === 'sweep' ? '' : undefined}
+                        className={`font-mono text-[10px] tracking-[0.25em] uppercase mb-1.5 flex items-center gap-1.5 ${TYPE_KICKER_COLOR[t]}`}
+                      >
+                        <span data-star><ChicagoStar size={8} /></span> {TYPE_LABELS[t]}
                       </div>
                       {typeEntries.length === 0 ? (
                         <div className="font-mono italic text-[10px] text-ink-soft pl-4">

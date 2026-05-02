@@ -124,6 +124,7 @@ export const NextSweepHero = ({ next, ward, section }: Props) => {
             — Notice to motorists —
           </div>
           <h3
+            data-move-car-headline
             className={`font-serif italic leading-[1] ${isUrgent ? 'text-chicago-red' : 'text-ink'}`}
             style={{ fontSize: 'clamp(36px, 7.5vw, 76px)' }}
           >

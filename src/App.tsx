@@ -72,11 +72,20 @@ export default function App() {
   return (
     <div className="min-h-screen grain bg-cream text-ink lg:py-8 lg:bg-cream-dark">
       {/* Broadsheet "page" — narrow on mobile, framed on desktop */}
-      <div className="max-w-xl mx-auto bg-cream lg:max-w-[1280px] lg:border-2 lg:border-ink lg:shadow-[0_2px_0_0_rgba(15,26,46,0.15)]">
+      <div
+        data-page-frame
+        className="max-w-xl mx-auto bg-cream lg:max-w-[1280px] lg:border-2 lg:border-ink lg:shadow-[0_2px_0_0_rgba(15,26,46,0.15)]"
+      >
+        <div
+          data-print-header
+          className="hidden"
+        >
+          THE SWEEP · {result?.display ?? '—'} · printed {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+        </div>
         <Masthead />
 
         {/* Body grid: single column on mobile, three-column with marginalia on desktop */}
-        <div className="lg:grid lg:grid-cols-[140px_minmax(0,1fr)_140px]">
+        <div data-page-grid className="lg:grid lg:grid-cols-[140px_minmax(0,1fr)_140px]">
           <Marginalia side="left" />
 
           <main className="lg:border-x lg:border-ink/30">
