@@ -21,7 +21,7 @@ export const NextSweepHero = ({ next, ward, section }: Props) => {
     return (
       <div className="mx-5 mt-6">
         <div className="font-mono text-[10px] tracking-[0.25em] uppercase mb-2 text-chicago-blue flex items-center gap-2">
-          <ChicagoStar size={9} /> Section II — Status
+          <ChicagoStar size={9} /> Section II.a — Status
         </div>
         <div className="border-2 border-ink p-8 text-center relative" style={{ background: '#E5F4FB' }}>
           <Seal size={44} className="absolute top-3 right-3 text-chicago-blue/60" />
@@ -57,7 +57,7 @@ export const NextSweepHero = ({ next, ward, section }: Props) => {
       {/* Section header */}
       <div className={`font-mono text-[10px] tracking-[0.25em] uppercase mb-2 flex items-center gap-2 ${accentText}`}>
         <span className={`inline-block w-1.5 h-1.5 rounded-full pulse-dot ${accentBg}`} />
-        <ChicagoStar size={9} /> Section II — Your Next Sweep
+        <ChicagoStar size={9} /> Section II.a — Sweep
       </div>
 
       {/* Hero broadsheet */}
