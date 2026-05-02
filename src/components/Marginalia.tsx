@@ -39,33 +39,34 @@ const NoteBlock = ({ note, tooltipSide }: NoteBlockProps) => {
       ? 'right-full mr-3'
       : 'left-full ml-3';
 
-  const body = (
-    <span className={`font-serif italic text-2xl leading-tight text-ink ${hasHint ? 'cursor-help' : ''}`}>
-      {note.body}
-      {hasHint && (
-        <sup className="font-sans not-italic text-chicago-red text-[14px] tracking-normal align-super ml-[1px] transition-transform group-hover:scale-110 group-focus-within:scale-110 inline-block">
-          *
-        </sup>
-      )}
-    </span>
+  const content = (
+    <>
+      <div className="font-mono text-[9px] tracking-[0.3em] uppercase text-chicago-red mb-1 flex items-center justify-center gap-1.5">
+        <span>{note.kicker}</span>
+        {hasHint && (
+          <ChicagoStar
+            size={9}
+            className="text-chicago-red transition-transform duration-150 group-hover:scale-125 group-focus-within:scale-125"
+          />
+        )}
+      </div>
+      <span className="font-serif italic text-2xl leading-tight text-ink">{note.body}</span>
+    </>
   );
 
   return (
     <div className="border-y border-ink/40 py-3 my-3 relative group">
-      <div className="font-mono text-[9px] tracking-[0.3em] uppercase text-chicago-red mb-1">
-        {note.kicker}
-      </div>
       {hasHint ? (
-        <span
+        <div
           tabIndex={0}
           role="button"
           aria-describedby={`hint-${note.kicker}`}
-          className="block focus:outline-none focus-visible:ring-1 focus-visible:ring-chicago-red focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
+          className="cursor-help focus:outline-none focus-visible:ring-1 focus-visible:ring-chicago-red focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
         >
-          {body}
-        </span>
+          {content}
+        </div>
       ) : (
-        body
+        content
       )}
       {hasHint && (
         <div
