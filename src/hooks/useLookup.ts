@@ -3,6 +3,8 @@ import type { LookupStatus, LookupResult } from '../types';
 import { geocode } from '../lib/geocode';
 import { lookupZone } from '../lib/zones';
 import { fetchSchedule } from '../lib/schedule';
+import { lookupRecycling } from '../lib/recycling';
+import { lookupGarbage } from '../lib/garbage';
 
 export interface UseLookupApi {
   status: LookupStatus;
@@ -30,8 +32,14 @@ export const useLookup = (): UseLookupApi => {
           coords = { lat: g.lat, lon: g.lon };
           display = g.display;
         }
+        // Sweep is the primary, must succeed. Recycling/garbage are nice-to-haves
+        // — failures resolve to null without blocking the result.
         const zone = await lookupZone(coords.lat, coords.lon);
-        const dates = await fetchSchedule(zone.ward, zone.section);
+        const [dates, recycling, garbage] = await Promise.all([
+          fetchSchedule(zone.ward, zone.section),
+          lookupRecycling(coords.lat, coords.lon).catch(() => null),
+          lookupGarbage(coords.lat, coords.lon).catch(() => null),
+        ]);
         setStatus({
           kind: 'done',
           result: {
@@ -40,6 +48,8 @@ export const useLookup = (): UseLookupApi => {
             dates,
             display,
             coords,
+            recycling,
+            garbage,
           },
         });
       } catch (e) {
