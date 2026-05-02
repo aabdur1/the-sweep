@@ -57,6 +57,9 @@ Promise.all (parallel after geocode + zone):
         │ SweepDate[]      │ RecyclingInfo     │ GarbageInfo
         └──────────────────┴───────────────────┘
                            ▼
+                   buildAlmanac(result, year)
+                   → ScheduleEntry[] for full year
+                           ▼
    UI: Masthead + AddressInput + NextSweepHero (II.a)
        + RoutinePickups (II.b) + ScheduleAlmanac + Footnotes
 ```
@@ -251,6 +254,7 @@ chi-sweep/
     ├── types.ts                    # SweepDate, ZoneInfo, GeocodeResult, LookupStatus, dataset constants
     ├── lib/
     │   ├── address.ts
+    │   ├── buildAlmanac.ts         # Pure full-year ScheduleEntry[] generator (consumed by Almanac + ICS)
     │   ├── dates.ts
     │   ├── garbage.ts
     │   ├── geocode.ts              # geocode() + geocodeByPlaceId() (Google Places)
@@ -279,7 +283,7 @@ chi-sweep/
         ├── RoutinePickups.tsx
         ├── SaveAddressPrompt.tsx   # "Save this address" inline form below the hero
         ├── SavedAddressChips.tsx   # Chip row above the input
-        ├── ScheduleAlmanac.tsx
+        ├── ScheduleAlmanac.tsx     # Filterable + collapsible past, Print + unified .ics
         └── Seal.tsx                # Round civic-stamp device — curved text + four-star arc
 ```
 
@@ -335,6 +339,7 @@ netlify deploy --prod
 2. Pure logic → `src/lib`. Stateful orchestration → `src/hooks`. Pure rendering → `src/components`.
 3. Match the existing aesthetic. New components follow the same border / typography / section-marker pattern.
 4. Test with the canonical address: `1819 S California Ave` (Pilsen, Ward 25).
+5. If the feature involves new dates/events at the address, add them to `lib/buildAlmanac.ts` so they flow into both the Almanac UI and the unified `.ics` export.
 
 ### Updating for next year
 
@@ -369,6 +374,7 @@ When the city publishes the 2027 datasets:
 - **v2 — Routine pickups** (recycling + garbage). Holiday-shift detection. Two-`.ics` export.
 - **v3 — Google Places autocomplete + saved addresses + recents** with localStorage persistence and graceful Census/Nominatim fallback.
 - **v3.5 — Desktop broadsheet** layout. Marginalia gutters, hero+sidebar spread, 4-column almanac, theatrical empty-state Roman numerals. Mobile preserved.
+- **v4 — Filterable Almanac + Print.** Three-checkbox filter (Sweep/Recycling/Garbage), full-year view, type-rows per month, collapsed-past-months by default, B&W broadsheet print stylesheet.
 
 ### Backlog (in rough priority order)
 1. **Snow route status** — ArcGIS layer 50; high consequence in winter.
