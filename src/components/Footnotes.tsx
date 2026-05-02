@@ -22,6 +22,10 @@ const NOTES: Array<{ lead: string; rest: string }> = [
     lead: 'Sweeping runs roughly 9 a.m. to 2 p.m., weekdays, weather permitting.',
     rest: ' Rain or snow can cancel a date with no notice.',
   },
+  {
+    lead: 'Yellow vs Orange weeks.',
+    rest: ' Recycling pickup alternates each week: half the city goes out on Yellow weeks, the other half on Orange. Your address is on a fixed color, so only weeks marked your color get a pickup. Garbage is weekly and ignores this entirely.',
+  },
 ];
 
 export const Footnotes = ({ address }: Props) => (
