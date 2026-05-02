@@ -16,6 +16,16 @@
 
 **Working directory:** All paths are relative to `/Users/amirabdurrahim/repos/chi-street-sweep/`.
 
+## Deviations recorded during execution
+
+These were resolved during Task 1 and are codified here so later tasks don't trip on them.
+
+- **Vite pinned to `^7`** (not the latest `^8`). Reason: `vite-plugin-pwa@1.2.0` (used in Task 18) peer-deps to Vite 7. Picking Vite 8 would force a vite-plugin-pwa downgrade.
+- **`tsconfig.json` is consolidated** — no `references` field, no separate `tsconfig.app.json`. Reason: project references require `composite: true` and `noEmit: false` on the referenced project, which conflicts with our `noEmit: true` in `tsc && vite build`. `tsconfig.node.json` exists and Vite consults it internally for the config file's own typing.
+- **React types pinned to `^18`** to match React 18 (Vite 8's scaffold defaults to React 19 types).
+- **`npm audit` reports 4 high-severity vulns** in `serialize-javascript` (transitive via `workbox-build` → `@rollup/plugin-terser`). Build-time only, no runtime exposure. Acknowledged; do not "fix" by downgrading `vite-plugin-pwa`.
+- **Future scaffolding warning:** modern `create-vite` replaced `--force` with `--overwrite`, which **deletes** existing files instead of just bypassing the prompt. Task 1's `npm create vite@latest .` deleted `CLAUDE.md`, `docs/`, and the renamed prototype before we caught it. All four were recovered (CLAUDE.md from session reminder, prototype from `~/Downloads`, spec/plan from `~/.claude/file-history/` snapshots) and verified intact. If re-scaffolding is ever needed, scaffold to a temp dir and `rsync` into the project.
+
 ---
 
 ## Task 1: Scaffold Vite + TypeScript project
@@ -118,10 +128,11 @@ Open `tsconfig.json` (created by Vite) and ensure these compiler options are pre
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src"]
 }
 ```
+
+`tsconfig.node.json` exists separately for Vite's own config typing but is not declared as a project reference (see "Deviations recorded during execution" above).
 
 - [ ] **Step 8: Add the typecheck npm script**
 
