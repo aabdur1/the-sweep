@@ -23,19 +23,66 @@ const RIGHT_NOTES: Note[] = [
   { kicker: 'Garbage', body: 'Weekly' },
 ];
 
-const NoteBlock = ({ note }: { note: Note }) => (
-  <div className="border-y border-ink/40 py-3 my-3">
-    <div className="font-mono text-[9px] tracking-[0.3em] uppercase text-chicago-red mb-1">
-      {note.kicker}
+interface NoteBlockProps {
+  note: Note;
+  /** Which side the marginalia is on, so the tooltip extends into the page. */
+  tooltipSide: 'left' | 'right';
+}
+
+const NoteBlock = ({ note, tooltipSide }: NoteBlockProps) => {
+  const hasHint = !!note.hint;
+  // Tooltip sits on the page-side of the gutter:
+  //   right gutter → tooltip extends LEFT (right-full)
+  //   left gutter  → tooltip extends RIGHT (left-full)
+  const tooltipPos =
+    tooltipSide === 'right'
+      ? 'right-full mr-3'
+      : 'left-full ml-3';
+
+  const body = (
+    <span
+      className={`font-serif italic text-2xl leading-tight text-ink ${
+        hasHint
+          ? 'underline decoration-ink/40 decoration-dashed underline-offset-[5px] cursor-help'
+          : ''
+      }`}
+    >
+      {note.body}
+    </span>
+  );
+
+  return (
+    <div className="border-y border-ink/40 py-3 my-3 relative group">
+      <div className="font-mono text-[9px] tracking-[0.3em] uppercase text-chicago-red mb-1">
+        {note.kicker}
+      </div>
+      {hasHint ? (
+        <span
+          tabIndex={0}
+          role="button"
+          aria-describedby={`hint-${note.kicker}`}
+          className="block focus:outline-none focus-visible:[&_span]:decoration-chicago-red"
+        >
+          {body}
+        </span>
+      ) : (
+        body
+      )}
+      {hasHint && (
+        <div
+          id={`hint-${note.kicker}`}
+          role="tooltip"
+          className={`absolute top-1/2 -translate-y-1/2 ${tooltipPos} w-60 border-2 border-ink bg-cream-dark p-3 z-20 pointer-events-none opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-150 shadow-[2px_2px_0_0_rgba(15,26,46,0.15)]`}
+        >
+          <div className="font-mono text-[8.5px] tracking-[0.3em] uppercase text-chicago-red mb-1.5">
+            The cycle, explained
+          </div>
+          <p className="font-serif italic text-[13px] leading-snug text-ink">{note.hint}</p>
+        </div>
+      )}
     </div>
-    <div className="font-serif italic text-2xl leading-tight text-ink">{note.body}</div>
-    {note.hint && (
-      <p className="font-sans text-[10px] leading-snug text-ink-soft mt-2">
-        {note.hint}
-      </p>
-    )}
-  </div>
-);
+  );
+};
 
 const VerticalLabel = ({ children }: { children: React.ReactNode }) => (
   <div
@@ -72,7 +119,7 @@ export const Marginalia = ({ side }: Props) => {
       {/* Pulled quotes */}
       <div className="text-center px-1">
         {notes.map((n) => (
-          <NoteBlock key={n.kicker} note={n} />
+          <NoteBlock key={n.kicker} note={n} tooltipSide={side} />
         ))}
       </div>
 
