@@ -74,3 +74,32 @@ export const ARCGIS_RECYCLING_LAYER =
   'https://gisapps.chicago.gov/arcgis/rest/services/ExternalApps/operational/MapServer/76';
 export const ARCGIS_GARBAGE_LAYER =
   'https://gisapps.chicago.gov/arcgis/rest/services/ExternalApps/operational/MapServer/127';
+
+// ─── v3: address search + saved ───────────────────────────────────────────
+
+export interface SavedAddress {
+  id: string;
+  label: string;
+  query: string;
+  lat: number;
+  lon: number;
+  savedAt: number;
+}
+
+export interface RecentLookup {
+  query: string;
+  lat: number;
+  lon: number;
+  lookedUpAt: number;
+}
+
+export interface PlaceSuggestion {
+  placeId: string;
+  mainText: string;
+  secondaryText: string;
+}
+
+export interface PlaceLocation {
+  lat: number;
+  lon: number;
+}
