@@ -53,9 +53,9 @@ export const NextSweepHero = ({ next, ward, section }: Props) => {
   const yr = next.date.getFullYear();
 
   return (
-    <section className="mx-5 mt-6 slide-up">
+    <section className="mx-5 mt-6 slide-up lg:mx-0 lg:px-5 lg:mt-0 lg:pt-6">
       {/* Section header */}
-      <div className={`font-mono text-[10px] tracking-[0.25em] uppercase mb-2 flex items-center gap-2 ${accentText}`}>
+      <div className={`font-mono text-[10px] tracking-[0.25em] uppercase mb-2 flex items-center gap-2 lg:text-[11px] lg:tracking-[0.35em] ${accentText}`}>
         <span className={`inline-block w-1.5 h-1.5 rounded-full pulse-dot ${accentBg}`} />
         <ChicagoStar size={9} /> Section II.a — Sweep
       </div>
@@ -77,11 +77,11 @@ export const NextSweepHero = ({ next, ward, section }: Props) => {
         </div>
 
         {/* Date display: giant numeral + stacked day/month/year */}
-        <div className="px-6 pt-7 pb-4 flex items-center gap-5 justify-center">
+        <div className="px-6 pt-7 pb-4 flex items-center gap-5 justify-center lg:pt-10 lg:pb-6 lg:gap-8">
           <div className="text-right shrink-0">
             <div
               className="font-serif text-ink leading-[0.82] tabular-nums"
-              style={{ fontSize: 'clamp(96px, 28vw, 168px)' }}
+              style={{ fontSize: 'clamp(96px, 22vw, 220px)' }}
             >
               {dayNum}
             </div>
@@ -90,14 +90,14 @@ export const NextSweepHero = ({ next, ward, section }: Props) => {
           <div className="text-left">
             <div
               className="font-serif italic text-ink leading-[0.95]"
-              style={{ fontSize: 'clamp(22px, 6.5vw, 34px)' }}
+              style={{ fontSize: 'clamp(22px, 5vw, 44px)' }}
             >
               {wkday}
             </div>
-            <div className="mt-2 font-mono text-[10px] tracking-[0.35em] uppercase text-ink-soft">
+            <div className="mt-2 font-mono text-[10px] tracking-[0.35em] uppercase text-ink-soft lg:text-[12px] lg:mt-3 lg:tracking-[0.45em]">
               {mname}
             </div>
-            <div className="font-mono text-[10px] tracking-[0.35em] uppercase text-ink-soft">
+            <div className="font-mono text-[10px] tracking-[0.35em] uppercase text-ink-soft lg:text-[12px] lg:tracking-[0.45em]">
               · {yr} ·
             </div>
           </div>
@@ -119,13 +119,13 @@ export const NextSweepHero = ({ next, ward, section }: Props) => {
         </div>
 
         {/* Headline */}
-        <div className="px-5 pb-4 text-center">
-          <div className="font-mono text-[9px] tracking-[0.3em] uppercase text-ink-soft mb-1">
+        <div className="px-5 pb-4 text-center lg:pb-6">
+          <div className="font-mono text-[9px] tracking-[0.3em] uppercase text-ink-soft mb-1 lg:text-[11px] lg:tracking-[0.4em] lg:mb-2">
             — Notice to motorists —
           </div>
           <h3
             className={`font-serif italic leading-[1] ${isUrgent ? 'text-chicago-red' : 'text-ink'}`}
-            style={{ fontSize: 'clamp(36px, 9.5vw, 54px)' }}
+            style={{ fontSize: 'clamp(36px, 7.5vw, 76px)' }}
           >
             Move your car.
           </h3>
@@ -133,13 +133,13 @@ export const NextSweepHero = ({ next, ward, section }: Props) => {
 
         {/* Ward + Section bar */}
         <div className="border-t-2 border-ink grid grid-cols-2 divide-x-2 divide-ink">
-          <div className="px-5 py-3 text-center">
-            <div className="font-mono text-[9px] tracking-[0.3em] uppercase text-ink-soft">Ward</div>
-            <div className="font-serif text-4xl text-ink leading-none mt-1 tabular-nums">{ward}</div>
+          <div className="px-5 py-3 text-center lg:py-5">
+            <div className="font-mono text-[9px] tracking-[0.3em] uppercase text-ink-soft lg:text-[11px] lg:tracking-[0.4em]">Ward</div>
+            <div className="font-serif text-4xl text-ink leading-none mt-1 tabular-nums lg:text-5xl lg:mt-2">{ward}</div>
           </div>
-          <div className="px-5 py-3 text-center">
-            <div className="font-mono text-[9px] tracking-[0.3em] uppercase text-ink-soft">Section</div>
-            <div className="font-serif text-4xl text-ink leading-none mt-1 tabular-nums">§ {section}</div>
+          <div className="px-5 py-3 text-center lg:py-5">
+            <div className="font-mono text-[9px] tracking-[0.3em] uppercase text-ink-soft lg:text-[11px] lg:tracking-[0.4em]">Section</div>
+            <div className="font-serif text-4xl text-ink leading-none mt-1 tabular-nums lg:text-5xl lg:mt-2">§ {section}</div>
           </div>
         </div>
       </article>

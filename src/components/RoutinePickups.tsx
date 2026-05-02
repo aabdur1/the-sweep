@@ -35,12 +35,12 @@ export const RoutinePickups = ({ recycling, garbage, onDownload }: Props) => {
   const garbageShift = garbage ? findUpcomingShift(garbage.day) : null;
 
   return (
-    <section className="mx-5 mt-6 slide-up">
+    <section className="mx-5 mt-6 slide-up lg:mx-0 lg:px-5 lg:mt-0 lg:pt-6">
       <div className="font-mono text-[10px] tracking-[0.25em] uppercase mb-2 text-chicago-blue flex items-center gap-1.5">
         <ChicagoStar size={9} /> Section II.b — Routine pickups
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2">
         {recycling && (
           <article className="border-2 border-ink p-4" style={{ background: '#FAF4E0' }}>
             <ChicagoStar size={10} className="text-chicago-blue mb-2" />

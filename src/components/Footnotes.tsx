@@ -29,14 +29,14 @@ const NOTES: Array<{ lead: string; rest: string }> = [
 ];
 
 export const Footnotes = ({ address }: Props) => (
-  <section className="px-5 mt-10 mb-6">
+  <section className="px-5 mt-10 mb-6 lg:px-8 lg:mt-14">
     {/* Heading */}
-    <div className="flex items-baseline gap-2 mb-3">
-      <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-chicago-red flex items-center gap-1.5">
+    <div className="flex items-baseline gap-2 mb-3 lg:mb-5">
+      <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-chicago-red flex items-center gap-1.5 lg:text-[11px] lg:tracking-[0.35em]">
         <ChicagoStar size={9} /> Section IV
       </span>
       <span className="flex-1 border-b border-ink/30" />
-      <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-ink-soft">
+      <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-ink-soft lg:text-[11px]">
         Fine print
       </span>
     </div>
@@ -44,10 +44,10 @@ export const Footnotes = ({ address }: Props) => (
     <div className="border-t-2 border-ink" />
     <div className="border-t border-ink mt-[2px] mb-4" />
 
-    <ol className="space-y-3">
+    <ol className="space-y-3 lg:grid lg:grid-cols-2 lg:gap-x-8 lg:gap-y-4 lg:space-y-0">
       {NOTES.map((n, i) => (
-        <li key={i} className="flex gap-3 text-[12.5px] leading-relaxed text-ink-soft">
-          <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-chicago-red shrink-0 pt-1">
+        <li key={i} className="flex gap-3 text-[12.5px] leading-relaxed text-ink-soft lg:text-[13.5px]">
+          <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-chicago-red shrink-0 pt-1 lg:text-[10px]">
             {String(i + 1).padStart(2, '0')}
           </span>
           <span>

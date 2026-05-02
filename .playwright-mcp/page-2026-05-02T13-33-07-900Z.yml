@@ -1,0 +1,256 @@
+- generic [ref=e4]:
+  - banner [ref=e5]:
+    - generic [ref=e10]:
+      - generic [ref=e11]: Vol. 2026 · No. 1
+      - generic [ref=e12]: Apr — Nov
+    - generic [ref=e17]: Department of Streets
+    - generic [ref=e20]:
+      - heading "The Sweep" [level=1] [ref=e21]
+      - heading "Registry & Almanac" [level=2] [ref=e22]
+    - paragraph [ref=e31]: Find your sweeping schedule by address. Never miss a $60 ticket again.
+  - generic [ref=e34]:
+    - generic [ref=e35]:
+      - generic [ref=e36]: Section I
+      - generic [ref=e39]: Lookup · 01
+    - generic [ref=e40]:
+      - generic [ref=e41]: Form CDS-01
+      - generic [ref=e42]:
+        - generic [ref=e43]:
+          - generic [ref=e44]: Street Address — Chicago, IL
+          - generic [ref=e45]:
+            - generic [ref=e46]: "Re:"
+            - textbox "Street Address — Chicago, IL Re:" [ref=e47]:
+              - /placeholder: 1819 S California Ave
+              - text: 1819 S California Ave
+        - button "Find my schedule" [ref=e48] [cursor=pointer]:
+          - text: Find my schedule
+          - img [ref=e97]
+        - generic [ref=e54]: Or
+        - button "Use current position" [ref=e56] [cursor=pointer]:
+          - img [ref=e57]
+          - text: Use current position
+  - generic [ref=e99]:
+    - generic [ref=e100]: Section II — Your Next Sweep
+    - article [ref=e103]:
+      - generic [ref=e108]:
+        - generic [ref=e109]: Issue dated · May 2, 2026
+        - generic [ref=e110]: Notice
+      - generic [ref=e113]:
+        - generic [ref=e115]: "7"
+        - generic [ref=e117]:
+          - generic [ref=e118]: Thursday
+          - generic [ref=e119]: May
+          - generic [ref=e120]: · 2026 ·
+      - generic [ref=e122]:
+        - generic [ref=e123]: ✕
+        - generic [ref=e124]: ✕
+        - text: IN 5 DAYS
+      - generic [ref=e125]:
+        - generic [ref=e126]: — Notice to motorists —
+        - heading "Move your car." [level=3] [ref=e127]
+      - generic [ref=e128]:
+        - generic [ref=e129]:
+          - generic [ref=e130]: Ward
+          - generic [ref=e131]: "25"
+        - generic [ref=e132]:
+          - generic [ref=e133]: Section
+          - generic [ref=e134]: § 03
+  - generic [ref=e135]:
+    - generic [ref=e136]:
+      - generic [ref=e137]:
+        - generic [ref=e138]: Section III
+        - heading "Full Almanac" [level=3] [ref=e140]
+        - generic [ref=e141]: 14 upcoming · 16 total
+      - button "Filed · .ics" [ref=e142] [cursor=pointer]:
+        - img [ref=e143]
+        - text: Filed · .ics
+    - generic [ref=e148]:
+      - generic [ref=e149]:
+        - heading "April" [level=4] [ref=e150]
+        - generic [ref=e152]: 02 dates
+      - generic [ref=e153]:
+        - generic [ref=e154]:
+          - generic [ref=e155]: A
+          - generic [ref=e156]: Tue
+          - generic [ref=e157]: "7"
+          - generic [ref=e159]:
+            - generic [ref=e160]: Apr
+            - generic [ref=e161]: Side A
+          - generic:
+            - generic: Swept
+        - generic [ref=e162]:
+          - generic [ref=e163]: B
+          - generic [ref=e164]: Wed
+          - generic [ref=e165]: "8"
+          - generic [ref=e167]:
+            - generic [ref=e168]: Apr
+            - generic [ref=e169]: Side B
+          - generic:
+            - generic: Swept
+    - generic [ref=e170]:
+      - generic [ref=e171]:
+        - heading "May" [level=4] [ref=e172]
+        - generic [ref=e174]: 02 dates
+      - generic [ref=e175]:
+        - generic [ref=e176]:
+          - generic [ref=e177]: A
+          - generic [ref=e178]: Thu
+          - generic [ref=e179]: "7"
+          - generic [ref=e181]:
+            - generic [ref=e182]: May
+            - generic [ref=e183]: Side A
+        - generic [ref=e184]:
+          - generic [ref=e185]: B
+          - generic [ref=e186]: Fri
+          - generic [ref=e187]: "8"
+          - generic [ref=e189]:
+            - generic [ref=e190]: May
+            - generic [ref=e191]: Side B
+    - generic [ref=e192]:
+      - generic [ref=e193]:
+        - heading "June" [level=4] [ref=e194]
+        - generic [ref=e196]: 02 dates
+      - generic [ref=e197]:
+        - generic [ref=e198]:
+          - generic [ref=e199]: A
+          - generic [ref=e200]: Tue
+          - generic [ref=e201]: "9"
+          - generic [ref=e203]:
+            - generic [ref=e204]: Jun
+            - generic [ref=e205]: Side A
+        - generic [ref=e206]:
+          - generic [ref=e207]: B
+          - generic [ref=e208]: Wed
+          - generic [ref=e209]: "10"
+          - generic [ref=e211]:
+            - generic [ref=e212]: Jun
+            - generic [ref=e213]: Side B
+    - generic [ref=e214]:
+      - generic [ref=e215]:
+        - heading "July" [level=4] [ref=e216]
+        - generic [ref=e218]: 02 dates
+      - generic [ref=e219]:
+        - generic [ref=e220]:
+          - generic [ref=e221]: A
+          - generic [ref=e222]: Mon
+          - generic [ref=e223]: "13"
+          - generic [ref=e225]:
+            - generic [ref=e226]: Jul
+            - generic [ref=e227]: Side A
+        - generic [ref=e228]:
+          - generic [ref=e229]: B
+          - generic [ref=e230]: Tue
+          - generic [ref=e231]: "14"
+          - generic [ref=e233]:
+            - generic [ref=e234]: Jul
+            - generic [ref=e235]: Side B
+    - generic [ref=e236]:
+      - generic [ref=e237]:
+        - heading "August" [level=4] [ref=e238]
+        - generic [ref=e240]: 02 dates
+      - generic [ref=e241]:
+        - generic [ref=e242]:
+          - generic [ref=e243]: A
+          - generic [ref=e244]: Wed
+          - generic [ref=e245]: "12"
+          - generic [ref=e247]:
+            - generic [ref=e248]: Aug
+            - generic [ref=e249]: Side A
+        - generic [ref=e250]:
+          - generic [ref=e251]: B
+          - generic [ref=e252]: Thu
+          - generic [ref=e253]: "13"
+          - generic [ref=e255]:
+            - generic [ref=e256]: Aug
+            - generic [ref=e257]: Side B
+    - generic [ref=e258]:
+      - generic [ref=e259]:
+        - heading "September" [level=4] [ref=e260]
+        - generic [ref=e262]: 02 dates
+      - generic [ref=e263]:
+        - generic [ref=e264]:
+          - generic [ref=e265]: A
+          - generic [ref=e266]: Mon
+          - generic [ref=e267]: "14"
+          - generic [ref=e269]:
+            - generic [ref=e270]: Sep
+            - generic [ref=e271]: Side A
+        - generic [ref=e272]:
+          - generic [ref=e273]: B
+          - generic [ref=e274]: Tue
+          - generic [ref=e275]: "15"
+          - generic [ref=e277]:
+            - generic [ref=e278]: Sep
+            - generic [ref=e279]: Side B
+    - generic [ref=e280]:
+      - generic [ref=e281]:
+        - heading "October" [level=4] [ref=e282]
+        - generic [ref=e284]: 02 dates
+      - generic [ref=e285]:
+        - generic [ref=e286]:
+          - generic [ref=e287]: A
+          - generic [ref=e288]: Thu
+          - generic [ref=e289]: "15"
+          - generic [ref=e291]:
+            - generic [ref=e292]: Oct
+            - generic [ref=e293]: Side A
+        - generic [ref=e294]:
+          - generic [ref=e295]: B
+          - generic [ref=e296]: Fri
+          - generic [ref=e297]: "16"
+          - generic [ref=e299]:
+            - generic [ref=e300]: Oct
+            - generic [ref=e301]: Side B
+    - generic [ref=e302]:
+      - generic [ref=e303]:
+        - heading "November" [level=4] [ref=e304]
+        - generic [ref=e306]: 02 dates
+      - generic [ref=e307]:
+        - generic [ref=e308]:
+          - generic [ref=e309]: A
+          - generic [ref=e310]: Tue
+          - generic [ref=e311]: "17"
+          - generic [ref=e313]:
+            - generic [ref=e314]: Nov
+            - generic [ref=e315]: Side A
+        - generic [ref=e316]:
+          - generic [ref=e317]: B
+          - generic [ref=e318]: Wed
+          - generic [ref=e319]: "18"
+          - generic [ref=e321]:
+            - generic [ref=e322]: Nov
+            - generic [ref=e323]: Side B
+  - generic [ref=e324]:
+    - generic [ref=e325]:
+      - generic [ref=e326]: Section IV
+      - generic [ref=e329]: Fine print
+    - list [ref=e332]:
+      - listitem [ref=e333]:
+        - generic [ref=e334]: "01"
+        - generic [ref=e335]:
+          - emphasis [ref=e336]: Two consecutive dates equal one for each side.
+          - text: The orange temporary signs posted curbside the day before will tell you which side is yours.
+      - listitem [ref=e337]:
+        - generic [ref=e338]: "02"
+        - generic [ref=e339]:
+          - emphasis [ref=e340]: The fine for parking on a swept street runs up to $60.
+          - text: That is the entire reason this app exists.
+      - listitem [ref=e341]:
+        - generic [ref=e342]: "03"
+        - generic [ref=e343]:
+          - emphasis [ref=e344]: Some streets carry permanent signs with their own schedule.
+          - text: Always check the post itself; it overrides the almanac.
+      - listitem [ref=e345]:
+        - generic [ref=e346]: "04"
+        - generic [ref=e347]:
+          - emphasis [ref=e348]: Sweeping runs roughly 9 a.m. to 2 p.m., weekdays, weather permitting.
+          - text: Rain or snow can cancel a date with no notice.
+    - generic [ref=e349]:
+      - generic [ref=e351]: City of Chicago Open Data · 2026
+      - generic [ref=e352]:
+        - text: "↳ Looked up:"
+        - emphasis [ref=e353]: 1819, South California Avenue, Douglass Park, North Lawndale, Chicago, West Chicago Township, Cook County, Illinois, 60623, United States
+  - contentinfo [ref=e86]:
+    - generic [ref=e88]:
+      - generic [ref=e94]: Built in Chicago · End of edition
+      - generic [ref=e95]: — ⬩ —

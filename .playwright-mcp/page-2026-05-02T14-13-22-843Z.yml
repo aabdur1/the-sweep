@@ -1,0 +1,60 @@
+- generic [ref=e4]:
+  - banner [ref=e5]:
+    - generic [ref=e10]:
+      - generic [ref=e11]: Vol. 2026 · No. 1
+      - generic [ref=e12]: Saturday, May 2, 2026
+      - generic [ref=e13]: Apr — Nov
+    - generic [ref=e18]: Department of Streets
+    - generic [ref=e21]:
+      - img [ref=e22]:
+        - generic [ref=e25]: CITY · OF · CHICAGO
+        - generic [ref=e26]: DEPT · OF · STREETS
+      - img [ref=e35]:
+        - generic [ref=e38]: CITY · OF · CHICAGO
+        - generic [ref=e39]: DEPT · OF · STREETS
+      - heading "The Sweep" [level=1] [ref=e48]
+      - heading "Registry & Almanac" [level=2] [ref=e49]
+    - paragraph [ref=e58]:
+      - text: Find your sweeping schedule by address.
+      - text: Never miss a $60 ticket again.
+  - generic [ref=e61]:
+    - generic [ref=e62]:
+      - generic [ref=e63]: Section I
+      - generic [ref=e66]: Lookup · 01
+    - generic [ref=e67]:
+      - generic [ref=e68]: Form CDS-01
+      - generic [ref=e69]:
+        - generic [ref=e70]:
+          - generic [ref=e71]: Street Address — Chicago, IL
+          - generic [ref=e72]:
+            - generic [ref=e73]: "Re:"
+            - textbox "Street Address — Chicago, IL Re:" [ref=e74]:
+              - /placeholder: 1819 S California Ave
+        - button "Find my schedule" [disabled] [ref=e75]:
+          - text: Find my schedule
+          - img [ref=e77]
+        - generic [ref=e81]: Or
+        - button "Use current position" [ref=e83] [cursor=pointer]:
+          - img [ref=e84]
+          - text: Use current position
+  - generic [ref=e86]:
+    - generic [ref=e87]:
+      - generic [ref=e88]: How it works
+      - generic [ref=e90]: Three steps
+    - generic [ref=e93]:
+      - generic [ref=e94]:
+        - generic [ref=e97]: I.
+        - generic [ref=e98]: Type your address
+        - generic [ref=e99]: Or tap "use current position"
+      - generic [ref=e100]:
+        - generic [ref=e103]: II.
+        - generic [ref=e104]: We find your zone
+        - generic [ref=e105]: Ward + section, automatic
+      - generic [ref=e106]:
+        - generic [ref=e109]: III.
+        - generic [ref=e110]: See every date
+        - generic [ref=e111]: For the whole season
+  - contentinfo [ref=e113]:
+    - generic [ref=e115]:
+      - generic [ref=e121]: Built in Chicago · End of edition
+      - generic [ref=e122]: — ⬩ —

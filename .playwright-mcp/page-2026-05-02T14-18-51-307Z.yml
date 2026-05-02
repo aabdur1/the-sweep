@@ -1,0 +1,51 @@
+- generic [ref=e4]:
+  - banner [ref=e5]:
+    - generic [ref=e10]:
+      - generic [ref=e11]: Vol. 2026 · No. 1
+      - generic [ref=e12]: Apr — Nov
+    - generic [ref=e17]: Department of Streets
+    - generic [ref=e20]:
+      - heading "The Sweep" [level=1] [ref=e21]
+      - heading "Registry & Almanac" [level=2] [ref=e22]
+    - paragraph [ref=e31]: Find your sweeping schedule by address. Never miss a $60 ticket again.
+  - generic [ref=e34]:
+    - generic [ref=e35]:
+      - generic [ref=e36]: Section I
+      - generic [ref=e39]: Lookup · 01
+    - generic [ref=e40]:
+      - generic [ref=e41]: Form CDS-01
+      - generic [ref=e42]:
+        - generic [ref=e43]:
+          - generic [ref=e44]: Street Address — Chicago, IL
+          - generic [ref=e45]:
+            - generic [ref=e46]: "Re:"
+            - textbox "Street Address — Chicago, IL Re:" [ref=e47]:
+              - /placeholder: 1819 S California Ave
+        - button "Find my schedule" [disabled] [ref=e48]:
+          - text: Find my schedule
+          - img [ref=e50]
+        - generic [ref=e54]: Or
+        - button "Use current position" [ref=e56] [cursor=pointer]:
+          - img [ref=e57]
+          - text: Use current position
+  - generic [ref=e59]:
+    - generic [ref=e60]:
+      - generic [ref=e61]: How it works
+      - generic [ref=e63]: Three steps
+    - generic [ref=e66]:
+      - generic [ref=e67]:
+        - generic [ref=e70]: I.
+        - generic [ref=e71]: Type your address
+        - generic [ref=e72]: Or tap "use current position"
+      - generic [ref=e73]:
+        - generic [ref=e76]: II.
+        - generic [ref=e77]: We find your zone
+        - generic [ref=e78]: Ward + section, automatic
+      - generic [ref=e79]:
+        - generic [ref=e82]: III.
+        - generic [ref=e83]: See every date
+        - generic [ref=e84]: For the whole season
+  - contentinfo [ref=e86]:
+    - generic [ref=e88]:
+      - generic [ref=e94]: Built in Chicago · End of edition
+      - generic [ref=e95]: — ⬩ —
