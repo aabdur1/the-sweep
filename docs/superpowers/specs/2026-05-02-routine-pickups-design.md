@@ -200,7 +200,7 @@ LookupResult { ward, section, dates, recycling, garbage, display, coords }
 ## Risks and gotchas
 
 - **ArcGIS endpoint stability.** The Chicago ArcGIS REST URL is unofficial relative to Socrata. It could be moved or restricted. Mitigation: graceful failure — if recycling/garbage lookups fail, render the sweep result as we do today and show a small "Routine pickups unavailable" notice. Do not block the sweep result on these queries.
-- **CORS.** Need to verify that browser fetches from `localhost` and from the Netlify-hosted origin both succeed against `gisapps.chicago.gov`. If CORS blocks production (likely scenario given the Census experience), we'll need a Netlify Function proxy. Spike this in the implementation plan's first task.
+- **ArcGIS CORS confirmed supported (verified 2026-05-02).** `access-control-allow-origin` reflects the Origin header and `access-control-allow-credentials: true`. No proxy needed. This is the opposite of Census — Chicago's ArcGIS is browser-friendly.
 - **`AREA_DETAIL` parser robustness.** The format is undocumented; some addresses may have variant codes (e.g. multiple days, vendor-specific routes). Decoder must default safely (return what it can parse, leave unknowns blank, never throw).
 - **Recycling A/B anchor.** Need a known calendar week → A or B mapping for 2026. If we can't pin one down deterministically, fall back to displaying the color label without a "next date" prediction. The decoded color (`YLW` / `ORG`) is still useful on its own.
 - **Holiday list ages.** The hand-encoded 2026 list works for 2026; we'll need to refresh annually. Add a TODO comment + a CLAUDE.md note for the next-year rollover.
