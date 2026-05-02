@@ -76,15 +76,15 @@ export const getPlaceLocation = async (
   sessionToken: string
 ): Promise<PlaceLocation | null> => {
   if (!isConfigured()) return null;
-  const url = PLACE_DETAILS_URL(placeId);
+  // Reuse the autocomplete session token via query param — Places API (New)
+  // bills autocomplete + details as one session in the cheapest tier when
+  // the same sessionToken appears on both calls.
+  const url = `${PLACE_DETAILS_URL(placeId)}?sessionToken=${encodeURIComponent(sessionToken)}`;
   const resp = await fetch(url, {
     method: 'GET',
     headers: {
       'X-Goog-Api-Key': KEY,
       'X-Goog-FieldMask': 'location',
-      // Reuse the autocomplete session token here — Google bills the
-      // autocomplete + details pair as one session in the cheapest tier.
-      'X-Goog-Spark-Session-Token': sessionToken,
     },
   });
   if (!resp.ok) return null;
