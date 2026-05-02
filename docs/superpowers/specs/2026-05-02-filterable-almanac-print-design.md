@@ -195,6 +195,29 @@ April                                                                17 dates
 - If all three are unchecked, the Almanac shows a small placeholder: `✦ Pick at least one type to see your schedule.`
 - Filter state is initialized from a default constant `DEFAULT_FILTER: Set<ScheduleType> = new Set(['sweep', 'recycling', 'garbage'])`.
 
+### Past months — collapsed by default
+
+A month is "fully past" when its last entry's date is before today. Fully past months are **collapsed** by default to keep the Almanac focused on what's coming.
+
+- Collapsed past months render as a single editorial summary line:
+
+  ```
+  ✦ April · 4 sweep · 8 garbage · 2 recycling · all swept
+  ```
+
+  (mono uppercase kicker + month name + counts of each checked type for that month + `all swept` postfix)
+- A toggle at the top of the past-months region expands them all at once:
+
+  ```
+  ──────────────────────────────────────────────────────────
+  ✦ Past months · 5 collected            [Show / Hide ▾]
+  ──────────────────────────────────────────────────────────
+  ```
+
+  The toggle button shows the count of collapsed months and the current state (Show ▾ / Hide ▴). When expanded, past months render with the same type-rows-per-month layout as upcoming months, with all entries dimmed to 40% opacity. Sweep entries inside expanded past months keep the "Swept" stamp.
+- The **current month** is never collapsed — it has both past and future dates inside.
+- Filter toggling re-evaluates which months are "fully past" (a month with zero checked-type entries is also collapsed).
+
 ### `.ics` filename
 
 - Today: two separate filenames (`chicago-sweeps-W{ward}S{section}-{year}.ics`, `chicago-routine-pickups-{year}.ics`).
@@ -287,6 +310,10 @@ The desktop broadsheet's three-column body grid (`[140px _ 1fr _ 140px]`) collap
 - The masthead is allowed to break naturally (won't repeat).
 - A `break-before: page` is set on the Almanac so it starts on its own page after the hero/routine.
 
+### Print respects expanded state
+
+What prints = what's currently shown on screen. If past months are collapsed, the printout shows only the collapsed summary lines (compact "fridge calendar" mode). If the user expands past months and then prints, the full year prints. This puts control of paper consumption directly in the user's hands — no separate "print everything" toggle needed.
+
 ### Running header
 
 A small running header appears at the top of every print page, scoped via a print-only element in App.tsx:
@@ -302,7 +329,7 @@ Tiny mono caps, centered, with a hairline rule below. Reads as the "page banner"
 ## Risks and gotchas
 
 - **Type-row vertical density.** Three rows × 4–5 garbage cells per month × 12 months = a lot of cells. The compact pill design (88×52) is essential — if pills stay at the current 50%-of-column size, the page becomes scrolling-only. Verify density at mobile (414px) early.
-- **Past dates dominate.** By August in real-world use, ~30 weeks of garbage are in the past at 40% opacity. The page risks looking like a wall of greyed-out cells. Consider auto-scrolling the Almanac to the current month on mount, or rendering past months in a collapsed/summarized form. **Plan implementation note:** add `auto-scroll to current month` on mount.
+- **Past dates dominate (handled).** By August in real-world use, ~30 weeks of garbage would otherwise be in the past at 40% opacity. Solved by collapsing fully-past months to a single summary line by default with a single toggle to expand. The current month is never collapsed (it has both past and future dates).
 - **Holiday-shifted dates with multiple holidays in one week.** The data already handles this (each holiday has its own `resolveShift`), but the Almanac UI has to label only the *actually-applied* shift, not every nearby holiday. Verify against Memorial Day week (May 25, 2026) where Friday → Saturday shifts.
 - **Print of an extremely tall page.** With type rows × 12 months × 168 dates, the printed output may be 3–4 letter pages. That's acceptable (it's an annual almanac), but page-break-inside-avoid on each month is essential to prevent month-mid breaks.
 - **`@media print` testing in dev.** Browser print preview behaves slightly differently across Chrome / Safari / Firefox. Verify in at least Chrome and Safari.
@@ -314,5 +341,5 @@ Tiny mono caps, centered, with a hairline rule below. Reads as the "page banner"
 - Exact pill dimensions and spacing — refine during implementation against real data density.
 - Whether `.ics` SUMMARY field includes the type prefix (e.g. `[GARBAGE] Pickup`) — likely yes, helps distinguish in calendar apps.
 - Filter chip vs checkbox styling specifics on mobile vs desktop — finalize during implementation.
-- Whether to pre-scroll the Almanac to the current month on mount, or rely on natural top-of-section scroll. Default: auto-scroll the *current month* into view.
 - Print page numbers (Page 1 of 3) — nice-to-have, defer.
+- Whether the past-months summary line includes the *month name* of the next future month inline (e.g. `↳ Next: May`) as an additional readability cue. Default: no, the next month visibly follows.
