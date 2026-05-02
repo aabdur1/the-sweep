@@ -121,6 +121,24 @@ Geocoders choke on apartment numbers, ZIP codes, and duplicated city/state. Alwa
 
 Test case that broke v1: `"1819 S. California Ave, APT BST, Chicago, IL 60608"`. Always test against this when touching the cleaner.
 
+### 5. ArcGIS layers (recycling + garbage)
+
+Chicago's Socrata recycling dataset (`edks-4g3b`) is empty/deprecated. The live data lives on the city's ArcGIS REST endpoint:
+
+- **Recycling base URL:** `https://gisapps.chicago.gov/arcgis/rest/services/ExternalApps/operational/MapServer/76`
+- **Garbage base URL:** `https://gisapps.chicago.gov/arcgis/rest/services/ExternalApps/operational/MapServer/127`
+- **Spatial query shape:** append `/query?geometry=<lon>,<lat>&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json`
+- **Recycling fields:** `SERVICE_AREA`, `AREA_DETAIL` (e.g. `"4IN-WK A-YLW-CTY-MO"`), `VENDOR`, `URL_PDF`.
+- **`AREA_DETAIL` decoding** (in `src/lib/recyclingDecode.ts`):
+  - Service area number (e.g. `4IN`)
+  - `WK A` / `WK B` — week pattern letter
+  - `YLW` / `ORG` — display color label
+  - Vendor code (`CTY` = city)
+  - Day of week code (`MO` etc.)
+- **Garbage fields:** `DAY` (full English weekday), `DIVISION`, `SAN_DAY`.
+- **Critical quirk:** the `WEEK A` letter and the `YLW` color label are NOT redundant. Use the color label for display; use the calendar week parity for "is this a pickup week" math (anchored by `lib/recyclingDecode.ts`'s `ANCHOR_WEEK_INDEX_IS_YELLOW` constant).
+- **Holiday shifts** are NOT in the ArcGIS data. We hand-encode them in `src/lib/holidays.ts` annually. **TODO: refresh this table at the end of each calendar year from chicago.gov's "Holiday Garbage Schedule" page.**
+
 ---
 
 ## Design system
@@ -180,6 +198,8 @@ The Chicago flag has four six-pointed red stars (Fort Dearborn, Great Fire, Colu
 - One star anchors each major page region: Lookup, Next Sweep, Almanac, Footnotes.
 - All stars render via `<ChicagoStar />` in `src/components/ChicagoStar.tsx` — never as Unicode star glyphs (e.g. four-pointed/six-pointed star characters) or other text symbols.
 
+**Sub-section convention:** when a top-level Section needs to split, use letter sub-numbering (II.a / II.b) rather than promoting to its own Section. This preserves the four-section / four-star mapping (I Lookup, II Pickups, III Almanac, IV Footnotes). Currently II.a = Sweep hero, II.b = Routine pickups (recycling + garbage).
+
 ---
 
 ## File structure
@@ -203,24 +223,29 @@ chi-sweep/
     ├── index.css                   # Tailwind + font imports + CSS vars
     ├── types.ts                    # SweepDate, ZoneInfo, GeocodeResult, LookupStatus, dataset constants
     ├── lib/                        # Pure functions, no React imports
-    │   ├── geocode.ts              # geocode() + Census→Nominatim chain
-    │   ├── zones.ts                # lookupZone() + 2026→2025 fallback
-    │   ├── schedule.ts             # fetchSchedule()
-    │   ├── ics.ts                  # generateICS()
     │   ├── address.ts              # cleanAddress()
-    │   └── dates.ts                # daysFromToday(), startOfDay(), formatters
+    │   ├── dates.ts                # daysFromToday(), startOfDay(), nextDayOfWeek(), weekIndexFrom2026(), formatters
+    │   ├── garbage.ts              # lookupGarbage() — ArcGIS layer 127
+    │   ├── geocode.ts              # geocode() + Census→Nominatim chain
+    │   ├── holidays.ts             # 2026 Chicago Streets and San holiday-shift table
+    │   ├── ics.ts                  # generateICS() (sweep) + generateRoutineICS() (recycling+garbage)
+    │   ├── recycling.ts            # lookupRecycling() — ArcGIS layer 76
+    │   ├── recyclingDecode.ts      # AREA_DETAIL parser + isPickupWeek predicate
+    │   ├── schedule.ts             # fetchSchedule()
+    │   └── zones.ts                # lookupZone() + 2026→2025 fallback
     ├── hooks/
     │   └── useLookup.ts            # Orchestrates the full geocode → zone → schedule flow
     └── components/
-        ├── Masthead.tsx
         ├── AddressInput.tsx
+        ├── ChicagoStar.tsx
         ├── ErrorPanel.tsx
-        ├── NextSweepHero.tsx
-        ├── ScheduleAlmanac.tsx
         ├── Footnotes.tsx
         ├── HowItWorks.tsx
-        ├── ChicagoStar.tsx         # Six-pointed flag star, used everywhere as section marker
-        └── Seal.tsx                # Civic seal device (added in Task 17 creative pass)
+        ├── Masthead.tsx
+        ├── NextSweepHero.tsx
+        ├── RoutinePickups.tsx
+        ├── ScheduleAlmanac.tsx
+        └── Seal.tsx
 ```
 
 **Pattern:** `src/lib` is pure functions, no React. `src/hooks` orchestrates. `src/components` renders. Don't put fetches inside components.
