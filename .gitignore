@@ -30,3 +30,6 @@ dist-ssr
 .playwright-mcp/
 *.png
 !public/icons/*.png
+
+# Superpowers brainstorm scratch (visual companion mockups)
+.superpowers/
