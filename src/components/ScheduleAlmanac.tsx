@@ -4,7 +4,7 @@ import type { LookupResult, ScheduleEntry, ScheduleType } from '../types';
 import { SCHEDULE_YEAR } from '../types';
 import { buildAlmanac } from '../lib/buildAlmanac';
 import { generateICS, buildICSFilename } from '../lib/ics';
-import { startOfDay, monthName } from '../lib/dates';
+import { startOfDay, monthName, daysFromToday, dayShort, monthShort } from '../lib/dates';
 import { ChicagoStar } from './ChicagoStar';
 
 interface Props {
@@ -37,6 +37,53 @@ const groupByMonth = (entries: ScheduleEntry[]): MonthGroup[] => {
   return groups;
 };
 
+const TYPE_KICKER_COLOR: Record<ScheduleType, string> = {
+  sweep: 'text-chicago-red',
+  recycling: 'text-chicago-blue',
+  garbage: 'text-ink',
+};
+
+const SWEEP_OFF_SEASON_MONTHS = new Set([0, 1, 2, 11]); // Jan, Feb, Mar, Dec
+
+interface PillProps {
+  entry: ScheduleEntry;
+  today: Date;
+}
+
+const DatePill = ({ entry, today }: PillProps) => {
+  const isToday = daysFromToday(entry.date) === 0;
+  const isPast = startOfDay(entry.date).getTime() < today.getTime();
+  const accent = isToday ? 'border-2 border-chicago-red' : 'border border-ink';
+  const opacity = isPast && entry.type !== 'sweep' ? 0.4 : 1;
+
+  return (
+    <div
+      className={`inline-flex flex-col items-start min-w-[88px] px-2 py-1.5 ${accent} mr-2 mb-2`}
+      style={{ opacity }}
+    >
+      <span className={`font-mono text-[9px] tracking-[0.2em] uppercase ${isToday ? 'text-chicago-red' : 'text-ink-soft'}`}>
+        {dayShort(entry.date)}
+      </span>
+      <span className="font-serif text-[24px] leading-none text-ink tabular-nums">
+        {entry.date.getDate()}
+      </span>
+      <span className="font-mono text-[8px] tracking-[0.15em] uppercase text-ink-soft mt-0.5">
+        {monthShort(entry.date)}
+      </span>
+      {entry.type === 'garbage' && entry.shiftedFrom && (
+        <span className="font-mono italic text-[8px] text-chicago-red mt-1">
+          (was {dayShort(entry.shiftedFrom.date)})
+        </span>
+      )}
+      {entry.type === 'sweep' && isPast && (
+        <span className="font-mono text-[7px] tracking-[0.2em] uppercase text-ink-soft border border-ink-soft px-1 mt-1 rotate-[-12deg] origin-left inline-block">
+          Swept
+        </span>
+      )}
+    </div>
+  );
+};
+
 export const ScheduleAlmanac = ({ result }: Props) => {
   const [filter, setFilter] = useState<Set<ScheduleType>>(
     () => new Set<ScheduleType>(ALL_TYPES)
@@ -50,6 +97,7 @@ export const ScheduleAlmanac = ({ result }: Props) => {
   const months = useMemo(() => groupByMonth(filteredEntries), [filteredEntries]);
   const totalCount = filteredEntries.length;
   const monthCount = months.filter((m) => m.entries.length > 0).length;
+  const todayRef = useMemo(() => startOfDay(new Date()), []);
 
   const toggle = (t: ScheduleType) => {
     setFilter((prev) => {
@@ -162,9 +210,31 @@ export const ScheduleAlmanac = ({ result }: Props) => {
                 <span className="hidden lg:block w-full border-t-2 border-ink mt-2" />
               </div>
 
-              {/* Type rows render in Task 5; placeholder list for now */}
-              <div className="font-mono text-[10px] text-ink-soft">
-                {month.entries.length === 0 ? '— no dates —' : `${month.entries.length} entries`}
+              <div className="space-y-3">
+                {ALL_TYPES.filter((t) => filter.has(t)).map((t) => {
+                  const typeEntries = month.entries.filter((e) => e.type === t);
+                  const isOffSeason =
+                    t === 'sweep' && SWEEP_OFF_SEASON_MONTHS.has(month.monthIdx);
+
+                  return (
+                    <div key={t}>
+                      <div className={`font-mono text-[10px] tracking-[0.25em] uppercase mb-1.5 flex items-center gap-1.5 ${TYPE_KICKER_COLOR[t]}`}>
+                        <ChicagoStar size={8} /> {TYPE_LABELS[t]}
+                      </div>
+                      {typeEntries.length === 0 ? (
+                        <div className="font-mono italic text-[10px] text-ink-soft pl-4">
+                          {isOffSeason ? '— off-season —' : '— none this month —'}
+                        </div>
+                      ) : (
+                        <div className="flex flex-wrap pl-4">
+                          {typeEntries.map((entry, i) => (
+                            <DatePill key={`${t}-${i}`} entry={entry} today={todayRef} />
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           ))}
