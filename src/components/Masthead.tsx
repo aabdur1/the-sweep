@@ -93,7 +93,7 @@ export const Masthead = () => (
         style={{ fontSize: 'clamp(14px, 2.4vw, 19px)', maxWidth: '70ch' }}
       >
         Find your sweeping schedule by address.
-        <span className="text-chicago-red"> Never miss a $60 ticket again.</span>
+        <span className="text-chicago-red"> Never get a $60 ticket again.</span>
       </p>
     </div>
 
