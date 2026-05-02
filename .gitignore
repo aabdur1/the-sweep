@@ -25,3 +25,8 @@ dist-ssr
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Playwright MCP scratch artifacts
+.playwright-mcp/
+*.png
+!public/icons/*.png
