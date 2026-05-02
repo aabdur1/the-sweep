@@ -14,7 +14,7 @@ const geocodeCensus = async (cleaned: string): Promise<GeocodeResult | null> => 
   return {
     lat: m.coordinates.y,
     lon: m.coordinates.x,
-    display: m.matchedAddress,
+    display: `${cleaned}, Chicago`,
   };
 };
 
@@ -46,7 +46,7 @@ const geocodeNominatim = async (cleaned: string): Promise<GeocodeResult | null> 
     return {
       lat: parseFloat(match.lat),
       lon: parseFloat(match.lon),
-      display: match.display_name,
+      display: `${cleaned}, Chicago`,
     };
   }
   return null;
