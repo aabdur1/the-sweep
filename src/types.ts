@@ -103,3 +103,17 @@ export interface PlaceLocation {
   lat: number;
   lon: number;
 }
+
+// ─── v4: filterable almanac ────────────────────────────────────────────────
+
+export type ScheduleEntry =
+  | { type: 'sweep'; date: Date; sideLabel: Side; pairIdx: 0 | 1 }
+  | { type: 'recycling'; date: Date; weekColor: WeekColor }
+  | {
+      type: 'garbage';
+      date: Date;
+      /** Set when this date was shifted from a holiday week. */
+      shiftedFrom?: { date: Date; holidayName: string };
+    };
+
+export type ScheduleType = ScheduleEntry['type'];
