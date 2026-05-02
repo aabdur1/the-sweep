@@ -1,5 +1,6 @@
 import type { GeocodeResult } from '../types';
 import { cleanAddress } from './address';
+import { isConfigured as googleIsConfigured, getPlaceLocation } from './googlePlaces';
 
 /** Primary: U.S. Census Geocoder — free, no rate limits, designed for U.S. addresses. */
 const geocodeCensus = async (cleaned: string): Promise<GeocodeResult | null> => {
@@ -52,6 +53,22 @@ const geocodeNominatim = async (cleaned: string): Promise<GeocodeResult | null> 
   return null;
 };
 
+/**
+ * Resolve coordinates by Google place ID — the path used after autocomplete
+ * selection. Returns null on any failure so the caller falls back.
+ */
+export const geocodeByPlaceId = async (
+  placeId: string,
+  display: string,
+  sessionToken: string
+): Promise<GeocodeResult | null> => {
+  if (!googleIsConfigured()) return null;
+  const loc = await getPlaceLocation(placeId, sessionToken);
+  if (!loc) return null;
+  return { lat: loc.lat, lon: loc.lon, display };
+};
+
+/** String-based geocode chain — used when no Google place ID is available. */
 export const geocode = async (rawAddress: string): Promise<GeocodeResult> => {
   const cleaned = cleanAddress(rawAddress);
   if (!cleaned) throw new Error('Please enter a street address.');
