@@ -8,7 +8,7 @@
 
 The motivating problem: the city's official lookup is a clunky multi-click flow through PDFs and ward maps. People forget to move their cars and get $60 tickets. This app collapses it to one screen.
 
-**Live at:** `<TBD — Netlify subdomain>`
+**Live at:** https://sweep.amirabdurrahim.com (Netlify, custom subdomain on amirabdurrahim.com)
 **Owner:** Amir (Chicago)
 
 ---
