@@ -7,6 +7,7 @@ import { ChicagoStar } from './ChicagoStar';
 interface Props {
   recycling: RecyclingInfo | null;
   garbage: GarbageInfo | null;
+  onDownload: () => void;
 }
 
 const dayLong: Record<string, string> = {
@@ -16,7 +17,7 @@ const dayLong: Record<string, string> = {
 
 const fmtDate = (d: Date): string => `${monthName(d).slice(0, 3)} ${d.getDate()}`;
 
-export const RoutinePickups = ({ recycling, garbage }: Props) => {
+export const RoutinePickups = ({ recycling, garbage, onDownload }: Props) => {
   if (!recycling && !garbage) {
     return (
       <section className="mx-5 mt-6">
@@ -94,6 +95,16 @@ export const RoutinePickups = ({ recycling, garbage }: Props) => {
               </div>
             )}
           </div>
+        </div>
+      )}
+      {(recycling || garbage) && (
+        <div className="mt-3 text-right">
+          <button
+            onClick={onDownload}
+            className="border border-ink px-3 py-1.5 font-mono text-[9px] tracking-[0.25em] uppercase text-ink hover:bg-ink hover:text-cream transition-colors"
+          >
+            Filed · routine.ics
+          </button>
         </div>
       )}
     </section>

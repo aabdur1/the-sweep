@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useLookup } from './hooks/useLookup';
 import { startOfDay } from './lib/dates';
-import { generateICS } from './lib/ics';
+import { generateICS, generateRoutineICS } from './lib/ics';
 import { SCHEDULE_YEAR } from './types';
 import { Masthead } from './components/Masthead';
 import { AddressInput } from './components/AddressInput';
@@ -51,6 +51,18 @@ export default function App() {
     URL.revokeObjectURL(url);
   };
 
+  const handleRoutineDownload = () => {
+    if (!result) return;
+    const url = generateRoutineICS(result.recycling, result.garbage);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `chicago-routine-pickups-${SCHEDULE_YEAR}.ics`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="min-h-screen grain bg-cream text-ink">
       <div className="max-w-xl mx-auto bg-cream">
@@ -67,7 +79,11 @@ export default function App() {
         {result && (
           <>
             <NextSweepHero next={next} ward={result.ward} section={result.section} />
-            <RoutinePickups recycling={result.recycling} garbage={result.garbage} />
+            <RoutinePickups
+              recycling={result.recycling}
+              garbage={result.garbage}
+              onDownload={handleRoutineDownload}
+            />
             <ScheduleAlmanac dates={result.dates} onDownload={handleDownload} />
             <Footnotes address={result.display} />
           </>
