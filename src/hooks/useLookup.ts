@@ -1,10 +1,11 @@
 import { useCallback, useState } from 'react';
 import type { LookupStatus, LookupResult } from '../types';
-import { geocode } from '../lib/geocode';
+import { geocode, geocodeByPlaceId } from '../lib/geocode';
 import { lookupZone } from '../lib/zones';
 import { fetchSchedule } from '../lib/schedule';
 import { lookupRecycling } from '../lib/recycling';
 import { lookupGarbage } from '../lib/garbage';
+import * as recents from '../lib/recentLookups';
 
 export interface UseLookupApi {
   status: LookupStatus;
@@ -14,12 +15,36 @@ export interface UseLookupApi {
   isLocating: boolean;
   lookup: (address: string) => Promise<void>;
   lookupByCoords: (lat: number, lon: number, displayOverride?: string) => Promise<void>;
+  lookupByPlaceId: (placeId: string, displayLabel: string, sessionToken: string) => Promise<void>;
   startLocating: () => void;
   reset: () => void;
 }
 
 export const useLookup = (): UseLookupApi => {
   const [status, setStatus] = useState<LookupStatus>({ kind: 'idle' });
+
+  const finalize = useCallback(
+    async (lat: number, lon: number, display: string) => {
+      const zone = await lookupZone(lat, lon);
+      const [dates, recycling, garbage] = await Promise.all([
+        fetchSchedule(zone.ward, zone.section),
+        lookupRecycling(lat, lon).catch(() => null),
+        lookupGarbage(lat, lon).catch(() => null),
+      ]);
+      const result: LookupResult = {
+        ward: zone.ward,
+        section: zone.section,
+        dates,
+        display,
+        coords: { lat, lon },
+        recycling,
+        garbage,
+      };
+      recents.record({ query: display, lat, lon });
+      setStatus({ kind: 'done', result });
+    },
+    []
+  );
 
   const runLookup = useCallback(
     async (lat: number | null, lon: number | null, address: string, displayOverride?: string) => {
@@ -32,31 +57,12 @@ export const useLookup = (): UseLookupApi => {
           coords = { lat: g.lat, lon: g.lon };
           display = g.display;
         }
-        // Sweep is the primary, must succeed. Recycling/garbage are nice-to-haves
-        // — failures resolve to null without blocking the result.
-        const zone = await lookupZone(coords.lat, coords.lon);
-        const [dates, recycling, garbage] = await Promise.all([
-          fetchSchedule(zone.ward, zone.section),
-          lookupRecycling(coords.lat, coords.lon).catch(() => null),
-          lookupGarbage(coords.lat, coords.lon).catch(() => null),
-        ]);
-        setStatus({
-          kind: 'done',
-          result: {
-            ward: zone.ward,
-            section: zone.section,
-            dates,
-            display,
-            coords,
-            recycling,
-            garbage,
-          },
-        });
+        await finalize(coords.lat, coords.lon, display || displayOverride || address);
       } catch (e) {
         setStatus({ kind: 'error', message: (e as Error).message || 'Something went wrong.' });
       }
     },
-    []
+    [finalize]
   );
 
   const lookup = useCallback(
@@ -72,6 +78,24 @@ export const useLookup = (): UseLookupApi => {
       await runLookup(lat, lon, '', displayOverride ?? 'Current location');
     },
     [runLookup]
+  );
+
+  const lookupByPlaceId = useCallback(
+    async (placeId: string, displayLabel: string, sessionToken: string) => {
+      setStatus({ kind: 'loading' });
+      try {
+        const g = await geocodeByPlaceId(placeId, displayLabel, sessionToken);
+        if (!g) {
+          // Fall back to string geocode using the displayed label.
+          await runLookup(null, null, displayLabel);
+          return;
+        }
+        await finalize(g.lat, g.lon, g.display);
+      } catch (e) {
+        setStatus({ kind: 'error', message: (e as Error).message || 'Something went wrong.' });
+      }
+    },
+    [finalize, runLookup]
   );
 
   const startLocating = useCallback(() => {
@@ -90,6 +114,7 @@ export const useLookup = (): UseLookupApi => {
     isLocating: status.kind === 'locating',
     lookup,
     lookupByCoords,
+    lookupByPlaceId,
     startLocating,
     reset,
   };
