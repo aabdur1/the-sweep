@@ -3,6 +3,8 @@ import { ChicagoStar } from './ChicagoStar';
 interface Note {
   kicker: string;
   body: string;
+  /** Optional small italic gloss shown below the body. */
+  hint?: string;
 }
 
 const LEFT_NOTES: Note[] = [
@@ -13,7 +15,11 @@ const LEFT_NOTES: Note[] = [
 
 const RIGHT_NOTES: Note[] = [
   { kicker: 'Recycling', body: 'Biweekly' },
-  { kicker: 'Cycle', body: 'Yellow / Orange' },
+  {
+    kicker: 'Cycle',
+    body: 'Yellow / Orange',
+    hint: 'Half the city goes out each week. Your address sits on one color; pickup only happens on your color’s week.',
+  },
   { kicker: 'Garbage', body: 'Weekly' },
 ];
 
@@ -23,6 +29,11 @@ const NoteBlock = ({ note }: { note: Note }) => (
       {note.kicker}
     </div>
     <div className="font-serif italic text-2xl leading-tight text-ink">{note.body}</div>
+    {note.hint && (
+      <p className="font-sans text-[10px] leading-snug text-ink-soft mt-2">
+        {note.hint}
+      </p>
+    )}
   </div>
 );
 
