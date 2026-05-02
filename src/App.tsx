@@ -7,6 +7,7 @@ import { Masthead } from './components/Masthead';
 import { AddressInput } from './components/AddressInput';
 import { ErrorPanel } from './components/ErrorPanel';
 import { NextSweepHero } from './components/NextSweepHero';
+import { RoutinePickups } from './components/RoutinePickups';
 import { ScheduleAlmanac } from './components/ScheduleAlmanac';
 import { Footnotes } from './components/Footnotes';
 import { HowItWorks } from './components/HowItWorks';
@@ -66,6 +67,7 @@ export default function App() {
         {result && (
           <>
             <NextSweepHero next={next} ward={result.ward} section={result.section} />
+            <RoutinePickups recycling={result.recycling} garbage={result.garbage} />
             <ScheduleAlmanac dates={result.dates} onDownload={handleDownload} />
             <Footnotes address={result.display} />
           </>
