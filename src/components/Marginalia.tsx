@@ -40,14 +40,13 @@ const NoteBlock = ({ note, tooltipSide }: NoteBlockProps) => {
       : 'left-full ml-3';
 
   const body = (
-    <span
-      className={`font-serif italic text-2xl leading-tight text-ink ${
-        hasHint
-          ? 'underline decoration-ink/40 decoration-dashed underline-offset-[5px] cursor-help'
-          : ''
-      }`}
-    >
+    <span className={`font-serif italic text-2xl leading-tight text-ink ${hasHint ? 'cursor-help' : ''}`}>
       {note.body}
+      {hasHint && (
+        <sup className="font-sans not-italic text-chicago-red text-[14px] tracking-normal align-super ml-[1px] transition-transform group-hover:scale-110 group-focus-within:scale-110 inline-block">
+          *
+        </sup>
+      )}
     </span>
   );
 
@@ -61,7 +60,7 @@ const NoteBlock = ({ note, tooltipSide }: NoteBlockProps) => {
           tabIndex={0}
           role="button"
           aria-describedby={`hint-${note.kicker}`}
-          className="block focus:outline-none focus-visible:[&_span]:decoration-chicago-red"
+          className="block focus:outline-none focus-visible:ring-1 focus-visible:ring-chicago-red focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
         >
           {body}
         </span>
