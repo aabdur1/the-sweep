@@ -2,6 +2,7 @@ import type { SweepDate } from '../types';
 import { SCHEDULE_YEAR } from '../types';
 import { daysFromToday, dayOfWeek, monthName } from '../lib/dates';
 import { ChicagoStar } from './ChicagoStar';
+import { Seal } from './Seal';
 
 interface Props {
   next: SweepDate | null;
@@ -9,63 +10,139 @@ interface Props {
   section: string;
 }
 
+const issueDated = new Date().toLocaleDateString('en-US', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+});
+
 export const NextSweepHero = ({ next, ward, section }: Props) => {
   if (!next) {
     return (
-      <div className="mx-5 mt-6 border-2 border-chicago-blue p-6 text-center" style={{ background: '#E5F4FB' }}>
-        <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-chicago-blue">
-          Season Concluded
+      <div className="mx-5 mt-6">
+        <div className="font-mono text-[10px] tracking-[0.25em] uppercase mb-2 text-chicago-blue flex items-center gap-2">
+          <ChicagoStar size={9} /> Section II — Status
         </div>
-        <p className="font-serif text-2xl mt-2 text-ink">No more sweeps this year.</p>
-        <p className="text-sm mt-1 text-ink-soft">Schedule resumes April {SCHEDULE_YEAR + 1}.</p>
+        <div className="border-2 border-ink p-8 text-center relative" style={{ background: '#E5F4FB' }}>
+          <Seal size={44} className="absolute top-3 right-3 text-chicago-blue/60" />
+          <div className="font-mono text-[10px] tracking-[0.3em] uppercase text-chicago-blue">
+            Season Concluded
+          </div>
+          <p className="font-serif text-3xl mt-3 text-ink">No more sweeps this year.</p>
+          <p className="font-sans text-sm mt-2 text-ink-soft italic">
+            Schedule resumes April {SCHEDULE_YEAR + 1}.
+          </p>
+        </div>
       </div>
     );
   }
+
   const days = daysFromToday(next.date);
   const isUrgent = days <= 2;
-  const accentClass = isUrgent ? 'text-chicago-red' : 'text-chicago-blue';
-  const accentBorderClass = isUrgent ? 'border-chicago-red' : 'border-chicago-blue';
+  const accentText = isUrgent ? 'text-chicago-red' : 'text-chicago-blue';
+  const accentBg = isUrgent ? 'bg-chicago-red' : 'bg-chicago-blue';
+  const accentBorder = isUrgent ? 'border-chicago-red' : 'border-chicago-blue';
   const bg = isUrgent ? '#FAEBEB' : '#E5F4FB';
-  const headline =
-    days === 0 ? 'TODAY' : days === 1 ? 'TOMORROW' : days < 0 ? `${Math.abs(days)} days ago` : `In ${days} days`;
+
+  const ticker =
+    days === 0 ? 'TODAY' : days === 1 ? 'TOMORROW' : days < 0 ? `${Math.abs(days)} DAYS AGO` : `IN ${days} DAYS`;
+
+  const dayNum = next.date.getDate();
+  const wkday = dayOfWeek(next.date);
+  const mname = monthName(next.date);
+  const yr = next.date.getFullYear();
 
   return (
-    <div className="mx-5 mt-6 slide-up">
-      <div className={`font-mono text-[10px] tracking-[0.25em] uppercase mb-2 flex items-center gap-2 ${accentClass}`}>
-        <span className={`inline-block w-1.5 h-1.5 rounded-full pulse-dot ${isUrgent ? 'bg-chicago-red' : 'bg-chicago-blue'}`} />
+    <section className="mx-5 mt-6 slide-up">
+      {/* Section header */}
+      <div className={`font-mono text-[10px] tracking-[0.25em] uppercase mb-2 flex items-center gap-2 ${accentText}`}>
+        <span className={`inline-block w-1.5 h-1.5 rounded-full pulse-dot ${accentBg}`} />
         <ChicagoStar size={9} /> Section II — Your Next Sweep
       </div>
-      <div className={`border-2 border-ink relative overflow-hidden ${accentBorderClass.replace('border-', 'shadow-')}`} style={{ background: bg }}>
-        <div className="absolute top-2 left-2 font-mono text-[9px] text-ink">◢</div>
-        <div className="absolute top-2 right-2 font-mono text-[9px] text-ink">◣</div>
-        <div className="absolute bottom-2 left-2 font-mono text-[9px] text-ink">◥</div>
-        <div className="absolute bottom-2 right-2 font-mono text-[9px] text-ink">◤</div>
 
-        <div className="px-5 py-7 text-center">
-          <div className={`font-mono text-[10px] tracking-[0.3em] uppercase ${accentClass}`}>
-            {isUrgent && '⚠ '}Move your car{isUrgent && ' ⚠'}
-          </div>
-          <div className="font-serif mt-3 leading-[0.95] text-ink" style={{ fontSize: 'clamp(48px, 14vw, 76px)' }}>
-            {headline}
-          </div>
-          <div className="font-serif italic mt-1 text-ink-soft" style={{ fontSize: 'clamp(18px, 5vw, 22px)' }}>
-            {dayOfWeek(next.date)}, {monthName(next.date)} {next.date.getDate()}
-          </div>
+      {/* Hero broadsheet */}
+      <article className="border-2 border-ink relative overflow-hidden" style={{ background: bg }}>
+        {/* Corner stars (replacing ◢◣◥◤) */}
+        <ChicagoStar size={9} className="absolute top-2 left-2 text-ink/70" />
+        <ChicagoStar size={9} className="absolute top-2 right-2 text-ink/70" />
+        <ChicagoStar size={9} className="absolute bottom-2 left-2 text-ink/70" />
+        <ChicagoStar size={9} className="absolute bottom-2 right-2 text-ink/70" />
 
-          <div className="my-5 mx-auto w-12 border-t border-ink" />
+        {/* Top edition bar */}
+        <div className="border-b border-ink/30 px-5 py-1.5 flex items-center justify-between font-mono text-[8.5px] tracking-[0.25em] uppercase text-ink-soft">
+          <span>Issue dated · {issueDated}</span>
+          <span className={`flex items-center gap-1.5 ${accentText}`}>
+            <ChicagoStar size={7} /> Notice <ChicagoStar size={7} />
+          </span>
+        </div>
 
-          <div className="grid grid-cols-2 gap-4 max-w-xs mx-auto">
-            <div>
-              <div className="font-mono text-[9px] tracking-[0.2em] uppercase opacity-60 text-ink">Ward</div>
-              <div className="font-serif text-3xl text-ink">{ward}</div>
+        {/* Date display: giant numeral + stacked day/month/year */}
+        <div className="px-6 pt-7 pb-4 flex items-center gap-5 justify-center">
+          <div className="text-right shrink-0">
+            <div
+              className="font-serif text-ink leading-[0.82] tabular-nums"
+              style={{ fontSize: 'clamp(96px, 28vw, 168px)' }}
+            >
+              {dayNum}
             </div>
-            <div>
-              <div className="font-mono text-[9px] tracking-[0.2em] uppercase opacity-60 text-ink">Section</div>
-              <div className="font-serif text-3xl text-ink">{section}</div>
+          </div>
+          <div className="border-l-2 border-ink self-stretch" />
+          <div className="text-left">
+            <div
+              className="font-serif italic text-ink leading-[0.95]"
+              style={{ fontSize: 'clamp(22px, 6.5vw, 34px)' }}
+            >
+              {wkday}
+            </div>
+            <div className="mt-2 font-mono text-[10px] tracking-[0.35em] uppercase text-ink-soft">
+              {mname}
+            </div>
+            <div className="font-mono text-[10px] tracking-[0.35em] uppercase text-ink-soft">
+              · {yr} ·
             </div>
           </div>
         </div>
-      </div>
-    </div>
+
+        {/* Ticker — postmark-style stamped block */}
+        <div className="px-5 pb-3">
+          <div className={`mx-auto inline-block w-full text-center border-y-2 ${accentBorder} py-2 relative`}>
+            <span className={`absolute inset-y-0 left-3 flex items-center font-mono text-[9px] tracking-[0.25em] ${accentText}`}>
+              ✕
+            </span>
+            <span className={`absolute inset-y-0 right-3 flex items-center font-mono text-[9px] tracking-[0.25em] ${accentText}`}>
+              ✕
+            </span>
+            <span className={`font-mono text-[12px] tracking-[0.4em] uppercase ${accentText}`}>
+              {ticker}
+            </span>
+          </div>
+        </div>
+
+        {/* Headline */}
+        <div className="px-5 pb-4 text-center">
+          <div className="font-mono text-[9px] tracking-[0.3em] uppercase text-ink-soft mb-1">
+            — Notice to motorists —
+          </div>
+          <h3
+            className={`font-serif italic leading-[1] ${isUrgent ? 'text-chicago-red' : 'text-ink'}`}
+            style={{ fontSize: 'clamp(36px, 9.5vw, 54px)' }}
+          >
+            Move your car.
+          </h3>
+        </div>
+
+        {/* Ward + Section bar */}
+        <div className="border-t-2 border-ink grid grid-cols-2 divide-x-2 divide-ink">
+          <div className="px-5 py-3 text-center">
+            <div className="font-mono text-[9px] tracking-[0.3em] uppercase text-ink-soft">Ward</div>
+            <div className="font-serif text-4xl text-ink leading-none mt-1 tabular-nums">{ward}</div>
+          </div>
+          <div className="px-5 py-3 text-center">
+            <div className="font-mono text-[9px] tracking-[0.3em] uppercase text-ink-soft">Section</div>
+            <div className="font-serif text-4xl text-ink leading-none mt-1 tabular-nums">§ {section}</div>
+          </div>
+        </div>
+      </article>
+    </section>
   );
 };

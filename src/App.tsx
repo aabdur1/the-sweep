@@ -10,6 +10,7 @@ import { NextSweepHero } from './components/NextSweepHero';
 import { ScheduleAlmanac } from './components/ScheduleAlmanac';
 import { Footnotes } from './components/Footnotes';
 import { HowItWorks } from './components/HowItWorks';
+import { ChicagoStar } from './components/ChicagoStar';
 import './index.css';
 
 export default function App() {
@@ -70,11 +71,21 @@ export default function App() {
           </>
         )}
         {!result && !error && <HowItWorks />}
-        <div className="px-5 py-4 border-t-2 border-ink text-center">
-          <div className="font-mono text-[9px] tracking-[0.3em] uppercase text-ink-soft flex items-center justify-center gap-2">
-            ⬩ Built in Chicago ⬩ Data via City Open Data Portal ⬩
+        <footer className="border-t-2 border-ink mt-2">
+          <div className="border-t border-ink mt-[2px]" />
+          <div className="px-5 py-5 text-center">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <ChicagoStar size={9} className="text-chicago-red" />
+              <ChicagoStar size={9} className="text-chicago-red" />
+              <ChicagoStar size={9} className="text-chicago-red" />
+              <ChicagoStar size={9} className="text-chicago-red" />
+            </div>
+            <div className="font-mono text-[9px] tracking-[0.3em] uppercase text-ink-soft">
+              Built in Chicago · End of edition
+            </div>
+            <div className="font-serif italic text-[11px] text-ink-soft mt-1">— ⬩ —</div>
           </div>
-        </div>
+        </footer>
       </div>
     </div>
   );

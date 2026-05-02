@@ -6,16 +6,27 @@ interface Props {
 }
 
 export const ErrorPanel = ({ message, onDismiss }: Props) => (
-  <div className="mx-5 mt-4 border-2 border-chicago-red p-4 slide-up" style={{ background: '#FAEBEB' }}>
-    <div className="flex items-start gap-3">
-      <AlertTriangle size={18} className="mt-0.5 shrink-0 text-chicago-red" />
-      <div className="flex-1">
-        <div className="font-mono text-[10px] tracking-[0.25em] uppercase mb-1 text-chicago-red">
-          Couldn't find it
-        </div>
-        <div className="text-sm leading-relaxed text-ink">{message}</div>
-      </div>
-      <button onClick={onDismiss} className="font-mono text-xs px-2 text-chicago-red">✕</button>
+  <div className="mx-5 mt-4 slide-up">
+    {/* Stamped heading */}
+    <div className="flex items-center gap-2">
+      <AlertTriangle size={14} strokeWidth={2.5} className="text-chicago-red" />
+      <span className="font-mono text-[10px] tracking-[0.35em] uppercase text-chicago-red">
+        Dispatch failed
+      </span>
+      <span className="flex-1 border-b border-chicago-red/40" />
+      <button
+        onClick={onDismiss}
+        className="font-mono text-[10px] tracking-[0.25em] uppercase text-chicago-red px-2 hover:bg-chicago-red hover:text-cream transition-colors"
+      >
+        × Dismiss
+      </button>
+    </div>
+    <div className="border-t-2 border-chicago-red mt-1" />
+    <div className="border-t border-chicago-red mt-[2px]" />
+
+    {/* Body */}
+    <div className="border-x-2 border-b-2 border-chicago-red px-4 py-3" style={{ background: '#FAEBEB' }}>
+      <p className="font-serif italic text-[15px] leading-snug text-ink">{message}</p>
     </div>
   </div>
 );

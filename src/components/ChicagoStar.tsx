@@ -22,7 +22,8 @@ const buildPath = (): string => {
   return points.map(([x, y], i) => `${i === 0 ? 'M' : 'L'}${x.toFixed(4)},${y.toFixed(4)}`).join(' ') + ' Z';
 };
 
-const PATH = buildPath();
+/** Path string for a star centered at (0,0) with outer radius 1. Reusable in other SVGs. */
+export const STAR_PATH_D = buildPath();
 
 export const ChicagoStar = ({ size = 20, className, title }: Props) => (
   <svg
@@ -34,6 +35,6 @@ export const ChicagoStar = ({ size = 20, className, title }: Props) => (
     role={title ? 'img' : 'presentation'}
     aria-label={title}
   >
-    <path d={PATH} />
+    <path d={STAR_PATH_D} />
   </svg>
 );
