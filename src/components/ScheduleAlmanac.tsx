@@ -88,6 +88,7 @@ export const ScheduleAlmanac = ({ result }: Props) => {
   const [filter, setFilter] = useState<Set<ScheduleType>>(
     () => new Set<ScheduleType>(ALL_TYPES)
   );
+  const [showPast, setShowPast] = useState(false);
 
   const allEntries = useMemo(() => buildAlmanac(result, SCHEDULE_YEAR), [result]);
   const filteredEntries = useMemo(
@@ -98,6 +99,15 @@ export const ScheduleAlmanac = ({ result }: Props) => {
   const totalCount = filteredEntries.length;
   const monthCount = months.filter((m) => m.entries.length > 0).length;
   const todayRef = useMemo(() => startOfDay(new Date()), []);
+
+  const isMonthFullyPast = (m: MonthGroup): boolean => {
+    if (m.entries.length === 0) return false; // empty months don't count as past
+    const last = m.entries[m.entries.length - 1].date;
+    return startOfDay(last).getTime() < todayRef.getTime();
+  };
+
+  const pastMonths = months.filter(isMonthFullyPast);
+  const futureMonths = months.filter((m) => !isMonthFullyPast(m));
 
   const toggle = (t: ScheduleType) => {
     setFilter((prev) => {
@@ -190,9 +200,48 @@ export const ScheduleAlmanac = ({ result }: Props) => {
         </div>
       )}
 
+      {filter.size > 0 && pastMonths.length > 0 && (
+        <div className="mb-6 print:hidden">
+          <button
+            onClick={() => setShowPast((v) => !v)}
+            className="w-full flex items-center gap-3 font-mono text-[10px] tracking-[0.3em] uppercase text-ink-soft border-y border-ink/30 py-2 hover:bg-ink/5 transition-colors"
+          >
+            <ChicagoStar size={9} className="text-chicago-red" />
+            <span>Past months · {pastMonths.length} collected</span>
+            <span className="flex-1 border-t border-ink/20" />
+            <span>{showPast ? 'Hide ▴' : 'Show ▾'}</span>
+          </button>
+        </div>
+      )}
+
+      {filter.size > 0 && pastMonths.length > 0 && !showPast && (
+        <div className="space-y-1 mb-6 print:hidden">
+          {pastMonths.map((month) => {
+            const counts = ALL_TYPES.filter((t) => filter.has(t)).map((t) => {
+              const n = month.entries.filter((e) => e.type === t).length;
+              return n > 0 ? `${n} ${TYPE_LABELS[t].toLowerCase()}` : null;
+            }).filter(Boolean) as string[];
+            return (
+              <div
+                key={month.monthIdx}
+                className="font-mono text-[10px] tracking-[0.2em] uppercase text-ink-soft flex items-center gap-2"
+              >
+                <ChicagoStar size={8} className="text-ink-soft" />
+                <span className="font-serif italic text-[13px] tracking-normal text-ink normal-case">
+                  {month.label}
+                </span>
+                <span className="text-ink-soft">·</span>
+                <span>{counts.join(' · ')}</span>
+                <span className="text-ink-soft">· all swept</span>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
       {filter.size > 0 && (
         <div className="lg:grid lg:grid-cols-4 lg:gap-x-5 lg:gap-y-8">
-          {months.map((month, gi) => (
+          {(showPast ? months : futureMonths).map((month, gi) => (
             <div
               key={month.monthIdx}
               className={`mb-7 lg:mb-0 ${
