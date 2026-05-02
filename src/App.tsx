@@ -3,9 +3,7 @@ import { useLookup } from './hooks/useLookup';
 import { useAddressSearch } from './hooks/useAddressSearch';
 import { useSavedAddresses } from './hooks/useSavedAddresses';
 import { startOfDay } from './lib/dates';
-import { generateICS, generateRoutineICS } from './lib/ics';
 import { list as listRecents } from './lib/recentLookups';
-import { SCHEDULE_YEAR } from './types';
 import type { PlaceSuggestion, RecentLookup, SavedAddress } from './types';
 import { Masthead } from './components/Masthead';
 import { AddressInput } from './components/AddressInput';
@@ -68,30 +66,6 @@ export default function App() {
     const today = startOfDay(new Date());
     return result.dates.find((d) => startOfDay(d.date) >= today) ?? null;
   }, [result]);
-
-  const handleDownload = () => {
-    if (!result) return;
-    const url = generateICS(result.dates, result.ward, result.section);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `chicago-sweeps-W${result.ward}S${result.section}-${SCHEDULE_YEAR}.ics`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
-
-  const handleRoutineDownload = () => {
-    if (!result) return;
-    const url = generateRoutineICS(result.recycling, result.garbage);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `chicago-routine-pickups-${SCHEDULE_YEAR}.ics`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
 
   const existingSave = result ? savedHook.isSaved(result.coords.lat, result.coords.lon) : undefined;
 
@@ -159,12 +133,11 @@ export default function App() {
                     <RoutinePickups
                       recycling={result.recycling}
                       garbage={result.garbage}
-                      onDownload={handleRoutineDownload}
                     />
                   </div>
                 </div>
 
-                <ScheduleAlmanac dates={result.dates} onDownload={handleDownload} />
+                <ScheduleAlmanac result={result} />
                 <Footnotes address={result.display} />
               </>
             )}
