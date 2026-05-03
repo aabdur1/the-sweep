@@ -35,7 +35,7 @@ export const ChicagoStar = ({ size = 20, className, title, outlined = false }: P
     className={className}
     fill={outlined ? 'none' : 'currentColor'}
     stroke={outlined ? 'currentColor' : undefined}
-    strokeWidth={outlined ? 0.18 : undefined}
+    strokeWidth={outlined ? 0.24 : undefined}
     strokeLinejoin={outlined ? 'miter' : undefined}
     role={title ? 'img' : 'presentation'}
     aria-label={title}
