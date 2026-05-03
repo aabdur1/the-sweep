@@ -8,6 +8,27 @@
     <title>The Sweep — Chicago Street Sweeping Almanac</title>
     <meta name="description" content="Find your Chicago street sweeping schedule by address. Never get a $60 ticket again." />
     <meta name="theme-color" content="#F1E9D2" />
+    <!--
+      Pre-mount theme detection. Must run synchronously, before any styled paint,
+      to avoid a wrong-mode flash. Mirrors src/lib/theme.ts (STORAGE_KEY, DARK_CLASS,
+      and the persisted-or-system-pref decision).
+    -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('sweep.theme');
+          var mode =
+            saved === 'dark' || saved === 'light'
+              ? saved
+              : window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light';
+          if (mode === 'dark') document.documentElement.classList.add('dark');
+        } catch (_) {
+          /* private mode / blocked storage — fall through to default light */
+        }
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   </head>
