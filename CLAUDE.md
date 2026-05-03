@@ -276,11 +276,13 @@ chi-sweep/
     │   ├── recyclingDecode.ts
     │   ├── savedAddresses.ts       # sweep.savedAddresses localStorage façade
     │   ├── schedule.ts
+    │   ├── theme.ts                # Pure light/dark mode detection + persistence (no React)
     │   └── zones.ts
     ├── hooks/
     │   ├── useAddressSearch.ts     # Debounced typeahead + session token
     │   ├── useLookup.ts            # Orchestrates geocode → zone → schedule + recycling + garbage
-    │   └── useSavedAddresses.ts    # Reactive wrapper over saved-address localStorage
+    │   ├── useSavedAddresses.ts    # Reactive wrapper over saved-address localStorage
+    │   └── useTheme.ts             # React wrapper over lib/theme; { mode, toggle } + OS-pref subscription
     └── components/
         ├── AddressInput.tsx        # Now includes ARIA combobox dropdown
         ├── ChicagoStar.tsx
@@ -294,7 +296,8 @@ chi-sweep/
         ├── SaveAddressPrompt.tsx   # "Save this address" inline form below the hero
         ├── SavedAddressChips.tsx   # Chip row above the input
         ├── ScheduleAlmanac.tsx     # Filterable + collapsible past, Print + unified .ics
-        └── Seal.tsx                # Round civic-stamp device — curved text + four-star arc
+        ├── Seal.tsx                # Round civic-stamp device — curved text + four-star arc
+        └── ThemeToggle.tsx         # Light · Dark text toggle in the edition bar
 ```
 
 **Pattern:** `src/lib` is pure functions, no React. `src/hooks` orchestrates. `src/components` renders. Don't put fetches inside components.
