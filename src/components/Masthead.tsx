@@ -12,9 +12,6 @@ const todayLong = new Date().toLocaleDateString('en-US', {
 
 export const Masthead = () => (
   <header className="border-b-2 border-ink relative">
-    <div className="absolute top-2 right-3 z-10 lg:top-3 lg:right-5">
-      <ThemeToggle />
-    </div>
     {/* Chicago flag stripe — two thin blue bars on cream. Taller on desktop. */}
     <div className="flex flex-col">
       <div className="h-[3px] bg-chicago-blue lg:h-[5px]" />
@@ -26,7 +23,7 @@ export const Masthead = () => (
     <div className="px-5 py-2 flex items-center justify-between border-b border-ink/40 text-[9px] font-mono tracking-[0.2em] uppercase lg:px-10 lg:py-3 lg:text-[11px] lg:tracking-[0.3em]">
       <span className="text-ink">Vol. {SCHEDULE_YEAR} · No. 1</span>
       <span className="text-ink-soft hidden sm:inline">{todayLong}</span>
-      <span className="text-ink">Apr — Nov</span>
+      <ThemeToggle />
     </div>
 
     {/* Department kicker — small, authoritative, separated by stars */}
