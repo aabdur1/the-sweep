@@ -1,6 +1,7 @@
 import { SCHEDULE_YEAR } from '../types';
 import { ChicagoStar } from './ChicagoStar';
 import { Seal } from './Seal';
+import { ThemeToggle } from './ThemeToggle';
 
 const todayLong = new Date().toLocaleDateString('en-US', {
   weekday: 'long',
@@ -11,6 +12,9 @@ const todayLong = new Date().toLocaleDateString('en-US', {
 
 export const Masthead = () => (
   <header className="border-b-2 border-ink relative">
+    <div className="absolute top-2 right-3 z-10 lg:top-3 lg:right-5">
+      <ThemeToggle />
+    </div>
     {/* Chicago flag stripe — two thin blue bars on cream. Taller on desktop. */}
     <div className="flex flex-col">
       <div className="h-[3px] bg-chicago-blue lg:h-[5px]" />
