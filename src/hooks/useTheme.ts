@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   applyMode,
   persistMode,
@@ -14,7 +14,12 @@ import {
  * has already set the `.dark` class before React mounts, so we initialize
  * from `readAppliedMode()` rather than re-running the detection logic.
  */
-export const useTheme = (): { mode: Mode; toggle: () => void } => {
+export interface UseThemeApi {
+  mode: Mode;
+  toggle: () => void;
+}
+
+export const useTheme = (): UseThemeApi => {
   const [mode, setMode] = useState<Mode>(() => readAppliedMode());
 
   useEffect(() => {
@@ -24,12 +29,12 @@ export const useTheme = (): { mode: Mode; toggle: () => void } => {
     });
   }, []);
 
-  const toggle = () => {
+  const toggle = useCallback(() => {
     const next: Mode = mode === 'dark' ? 'light' : 'dark';
     persistMode(next);
     applyMode(next);
     setMode(next);
-  };
+  }, [mode]);
 
   return { mode, toggle };
 };
