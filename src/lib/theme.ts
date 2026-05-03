@@ -61,6 +61,7 @@ export const getInitialMode = (): Mode => {
 
 /** Toggle the `.dark` class on `<html>`. Pure DOM mutation, no state. */
 export const applyMode = (mode: Mode): void => {
+  if (typeof document === 'undefined') return;
   const root = document.documentElement;
   if (mode === 'dark') root.classList.add(DARK_CLASS);
   else root.classList.remove(DARK_CLASS);
@@ -68,6 +69,7 @@ export const applyMode = (mode: Mode): void => {
 
 /** Read the current applied mode by inspecting the DOM. */
 export const readAppliedMode = (): Mode => {
+  if (typeof document === 'undefined') return 'light';
   return document.documentElement.classList.contains(DARK_CLASS) ? 'dark' : 'light';
 };
 
