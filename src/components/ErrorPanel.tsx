@@ -25,7 +25,7 @@ export const ErrorPanel = ({ message, onDismiss }: Props) => (
     <div className="border-t border-chicago-red mt-[2px]" />
 
     {/* Body */}
-    <div className="border-x-2 border-b-2 border-chicago-red px-4 py-3" style={{ background: '#FAEBEB' }}>
+    <div className="border-x-2 border-b-2 border-chicago-red px-4 py-3" style={{ background: 'var(--tint-urgency)' }}>
       <p className="font-serif italic text-[15px] leading-snug text-ink">{message}</p>
     </div>
   </div>

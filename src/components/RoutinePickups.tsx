@@ -41,7 +41,7 @@ export const RoutinePickups = ({ recycling, garbage }: Props) => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2">
         {recycling && (
-          <article className="border-2 border-ink p-4" style={{ background: '#FAF4E0' }}>
+          <article className="border-2 border-ink p-4" style={{ background: 'var(--tint-card)' }}>
             <ChicagoStar size={10} className="text-chicago-blue mb-2" />
             <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-ink-soft">
               Recycling
@@ -58,7 +58,7 @@ export const RoutinePickups = ({ recycling, garbage }: Props) => {
           </article>
         )}
         {garbage && (
-          <article className="border-2 border-ink p-4" style={{ background: '#FAF4E0' }}>
+          <article className="border-2 border-ink p-4" style={{ background: 'var(--tint-card)' }}>
             <ChicagoStar size={10} className="text-chicago-blue mb-2" />
             <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-ink-soft">
               Garbage
@@ -77,7 +77,7 @@ export const RoutinePickups = ({ recycling, garbage }: Props) => {
       </div>
 
       {(recyclingShift || garbageShift) && (
-        <div className="mt-3 border-2 border-chicago-red p-3 flex items-start gap-2" style={{ background: '#FAEBEB' }}>
+        <div className="mt-3 border-2 border-chicago-red p-3 flex items-start gap-2" style={{ background: 'var(--tint-urgency)' }}>
           <AlertTriangle size={14} strokeWidth={2.5} className="mt-0.5 shrink-0 text-chicago-red" />
           <div className="text-sm leading-snug">
             <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-chicago-red mb-1">
