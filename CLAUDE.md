@@ -176,6 +176,16 @@ This is **not** a generic SaaS app. The aesthetic is **editorial / civic almanac
 --rule:         #1A2540;   /* Borders */
 ```
 
+### Dark mode
+
+The app supports a "Inverted Parchment" dark variant — the same palette transposed, not a redesign. A `.dark` class on `<html>` flips a parallel set of CSS vars defined in `:root.dark` in `src/index.css`. Detection runs synchronously in an inline `<script>` in `index.html`'s `<head>` to avoid a wrong-mode flash.
+
+- **Detection:** persisted choice (`localStorage['sweep.theme']`) wins; otherwise OS `prefers-color-scheme`.
+- **Toggle:** `<ThemeToggle />` lives in the edition bar (rightmost slot). Renders `Light · Dark` in the bar's mono caps; active mode in chicago-red, inactive in ink-soft with hover. Each label is a button that switches to that mode.
+- **Tint vars:** components that need a tinted background should use `style={{ background: 'var(--tint-urgency)' }}` (or `--tint-calm`, `--tint-card`) rather than inlining a hex. The vars invert correctly for dark mode and stay B&W for print.
+- **Print:** `@media print` overrides the palette regardless of dark/light state — printed almanac is always B&W broadsheet.
+- **Module layout:** `src/lib/theme.ts` (pure detection/persistence), `src/hooks/useTheme.ts` (React wrapper), `src/components/ThemeToggle.tsx` (UI).
+
 ### Typography
 
 - **Display:** `DM Serif Display` — used for the masthead, dates, headlines
@@ -375,6 +385,7 @@ When the city publishes the 2027 datasets:
 - **v3 — Google Places autocomplete + saved addresses + recents** with localStorage persistence and graceful Census/Nominatim fallback.
 - **v3.5 — Desktop broadsheet** layout. Marginalia gutters, hero+sidebar spread, 4-column almanac, theatrical empty-state Roman numerals. Mobile preserved.
 - **v4 — Filterable Almanac + Print.** Three-checkbox filter (Sweep/Recycling/Garbage), full-year view, type-rows per month, collapsed-past-months by default, B&W broadsheet print stylesheet.
+- **v5 — Dark mode.** Inverted Parchment palette via `.dark` class on `<html>`. Auto-detects OS preference, persists manual override in localStorage. `Light · Dark` text toggle in the edition bar. Tint vars (`--tint-urgency`, `--tint-calm`, `--tint-card`) replace inline hex backgrounds. Print stays B&W in either mode.
 
 ### Backlog (in rough priority order)
 1. **Snow route status** — ArcGIS layer 50; high consequence in winter.
@@ -382,7 +393,6 @@ When the city publishes the 2027 datasets:
 3. **Calendar push notifications** — closes the loop on the `.ics` download.
 4. **Live sweeper tracker integration** — `chicago.gov/.../sweeper_tracker.html`.
 5. **Ward office contact** — alderperson and office number, sourced from the ward number we already have.
-6. **Dark mode** — needs its own design pass, not just inverted colors.
 
 ---
 

@@ -98,7 +98,7 @@ export const AddressInput = ({
         </span>
       </div>
 
-      <div className="border-2 border-ink relative" style={{ background: '#FAF4E0' }}>
+      <div className="border-2 border-ink relative" style={{ background: 'var(--tint-card)' }}>
         <div className="absolute -top-px right-4 bg-cream border-x border-b border-ink px-2 py-0.5 font-mono text-[8.5px] tracking-[0.25em] uppercase text-ink-soft">
           Form CDS-01
         </div>

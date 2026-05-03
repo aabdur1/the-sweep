@@ -23,7 +23,7 @@ export const NextSweepHero = ({ next, ward, section }: Props) => {
         <div className="font-mono text-[10px] tracking-[0.25em] uppercase mb-2 text-chicago-blue flex items-center gap-2">
           <ChicagoStar size={9} /> Section II.a — Status
         </div>
-        <div className="border-2 border-ink p-8 text-center relative" style={{ background: '#E5F4FB' }}>
+        <div className="border-2 border-ink p-8 text-center relative" style={{ background: 'var(--tint-calm)' }}>
           <Seal size={44} className="absolute top-3 right-3 text-chicago-blue/60" />
           <div className="font-mono text-[10px] tracking-[0.3em] uppercase text-chicago-blue">
             Season Concluded
@@ -42,7 +42,7 @@ export const NextSweepHero = ({ next, ward, section }: Props) => {
   const accentText = isUrgent ? 'text-chicago-red' : 'text-chicago-blue';
   const accentBg = isUrgent ? 'bg-chicago-red' : 'bg-chicago-blue';
   const accentBorder = isUrgent ? 'border-chicago-red' : 'border-chicago-blue';
-  const bg = isUrgent ? '#FAEBEB' : '#E5F4FB';
+  const bg = isUrgent ? 'var(--tint-urgency)' : 'var(--tint-calm)';
 
   const ticker =
     days === 0 ? 'TODAY' : days === 1 ? 'TOMORROW' : days < 0 ? `${Math.abs(days)} DAYS AGO` : `IN ${days} DAYS`;

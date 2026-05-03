@@ -2,6 +2,8 @@ interface Props {
   size?: number;
   className?: string;
   title?: string;
+  /** When true, renders as a stroke outline rather than a filled fill. */
+  outlined?: boolean;
 }
 
 /**
@@ -25,13 +27,16 @@ const buildPath = (): string => {
 /** Path string for a star centered at (0,0) with outer radius 1. Reusable in other SVGs. */
 export const STAR_PATH_D = buildPath();
 
-export const ChicagoStar = ({ size = 20, className, title }: Props) => (
+export const ChicagoStar = ({ size = 20, className, title, outlined = false }: Props) => (
   <svg
     width={size}
     height={size}
     viewBox="-1.1 -1.1 2.2 2.2"
     className={className}
-    fill="currentColor"
+    fill={outlined ? 'none' : 'currentColor'}
+    stroke={outlined ? 'currentColor' : undefined}
+    strokeWidth={outlined ? 0.24 : undefined}
+    strokeLinejoin={outlined ? 'miter' : undefined}
     role={title ? 'img' : 'presentation'}
     aria-label={title}
   >

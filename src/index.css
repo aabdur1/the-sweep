@@ -14,6 +14,29 @@
   --chicago-blue: #41B6E6;
   --blue-deep:    #2E8AB5;
   --rule:         #1A2540;
+
+  /* Semantic tint backgrounds — used by inline styles in components that
+     hardcoded hex (NextSweepHero, RoutinePickups, ErrorPanel, AddressInput).
+     Migrated to vars so they invert in dark mode. */
+  --tint-urgency: #FAEBEB;   /* hot card bg — light pink (sweep urgency, errors, holiday-shift) */
+  --tint-calm:    #E5F4FB;   /* cool card bg — light cyan (season-concluded, calm sweep state) */
+  --tint-card:    #FAF4E0;   /* warm card bg — pale cream (routine pickup cards, form panel) */
+}
+
+:root.dark {
+  --cream:        #0F1A2E;
+  --cream-dark:   #1A2540;
+  --ink:          #F1E9D2;
+  --ink-soft:     #D4C9A8;
+  --chicago-red:  #E54B66;
+  --red-deep:     #D6647A;
+  --chicago-blue: #6BCBEC;
+  --blue-deep:    #8FD7EE;
+  --rule:         #D4C9A8;
+
+  --tint-urgency: #2A1620;   /* deep wine — urgent without glare */
+  --tint-calm:    #142A38;   /* deep teal-navy — sits one step above page */
+  --tint-card:    #1A2540;   /* matches --cream-dark — invisible "card" against page table */
 }
 
 @layer base {
@@ -35,6 +58,13 @@
   }
   .pulse-dot { animation: pulseDot 1.6s ease-in-out infinite; }
   .slide-up { animation: slideUp 0.5s ease-out forwards; }
+  :root.dark .grain {
+    background-image:
+      radial-gradient(rgba(241,233,210,0.05) 1px, transparent 1px),
+      radial-gradient(rgba(229,75,102,0.05) 1px, transparent 1px);
+    background-size: 3px 3px, 7px 7px;
+    background-position: 0 0, 1px 2px;
+  }
 }
 
 @keyframes pulseDot {
