@@ -59,6 +59,8 @@ git commit -m "chore(deps): add wouter, leaflet, @types/leaflet for v6 parking"
 
 A pure-refactor task. The current `App.tsx` renders the entire app body inside its function. We extract that body to `pages/SweepPage.tsx` and have `App.tsx` import + render it. Visible behavior unchanged.
 
+**Note on `<Footnotes/>`:** despite earlier mention of "shared layout", `<Footnotes/>` is sweep-specific (it takes `address={result.display}` and only renders inside the conditional result block). It STAYS inside `SweepPage` — do not lift it to `App`. The parking page will define its own equivalent or omit it.
+
 - [ ] **Step 1: Read the current `src/App.tsx` to identify exactly what moves**
 
 Run (for reference):
