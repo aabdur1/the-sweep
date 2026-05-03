@@ -12,6 +12,12 @@
 
 **Note on testing:** No automated test framework exists in this project (per CLAUDE.md / `package.json`). Verification is `npm run typecheck` plus controller-driven manual smoke. Two tasks (7 and 9) include one-off verification scripts run via `npx tsx ...` to validate live API responses before building dependent code — these are not part of the shipping codebase.
 
+**v1 scope adjustment (post-Task 9):** Sampled 1,893 payboxes citywide and confirmed `ATTRIBUTE_DESC` is `"."` for ALL records — the city no longer populates that field. Knock-on simplifications for Tasks 11/12:
+- Map pins are a single style (red filled circle), not tri-state by active/free/unknown
+- Meter list rows show street + spaces + max-time only; no active-now badge column, no schedule string
+- `meterHours.ts` ships as the minimal stub; `computeActiveStatus` always returns `state: 'unknown'`
+- The annotation pipeline in `useParking` (Task 10) still calls `computeActiveStatus` for forward-compat — when the city repopulates `ATTRIBUTE_DESC` (or v2 wires Schedule 10), the UI can be re-enabled with no plumbing changes
+
 **Working directory:** All paths relative to the worktree root (controller will set this up).
 
 **Task ordering rationale:** Dependencies first, then refactor, then router skeleton (single route), then the pure modules behind the new data sources (each unused until wired in), then the new components, then the parking page, then the route wire-up, then the mode toggle. The app remains in a working state at every commit; the new parking surface only becomes user-visible at task 16.
